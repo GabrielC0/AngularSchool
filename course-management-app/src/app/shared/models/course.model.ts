@@ -1,11 +1,9 @@
-import { User } from './user.model';
-
 export interface Course {
   id: string;
   title: string;
   description: string;
   teacherId: string;
-  teacher?: User;
+  teacherName?: string;
   students: Student[];
   startDate: Date;
   endDate: Date;
@@ -19,8 +17,8 @@ export interface Course {
 
 export interface Student {
   id: string;
-  userId: string;
-  user?: User;
+  studentId: string;
+  studentName?: string;
   courseId: string;
   enrollmentDate: Date;
   grade?: number;

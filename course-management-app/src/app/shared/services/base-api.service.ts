@@ -13,13 +13,8 @@ export class BaseApiService {
 
   protected getHeaders(): HttpHeaders {
     return new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${this.getToken()}`
+      'Content-Type': 'application/json'
     });
-  }
-
-  private getToken(): string {
-    return localStorage.getItem(APP_CONSTANTS.STORAGE_KEYS.TOKEN) || '';
   }
 
   protected get<T>(endpoint: string, params?: any): Observable<T> {

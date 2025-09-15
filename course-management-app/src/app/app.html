@@ -2,44 +2,17 @@
   <header class="app-header">
     <h1>📚 Système de Gestion de Cours</h1>
     <p>Gérez vos cours, étudiants et professeurs facilement</p>
+    <nav class="app-nav">
+      <a routerLink="/courses" class="nav-link">Cours</a>
+      <a routerLink="/courses/create" class="nav-link">Créer un cours</a>
+    </nav>
   </header>
 
   <main class="app-main">
-    <div class="welcome-section">
-      <h2>Bienvenue dans votre plateforme éducative</h2>
-      <p>Cette application vous permet de gérer efficacement vos cours, étudiants et professeurs.</p>
-    </div>
-
-    <div class="features-grid">
-      <div class="feature-card">
-        <div class="feature-icon">👨‍🏫</div>
-        <h3>Gestion des Professeurs</h3>
-        <p>Créez et gérez les profils des professeurs</p>
-      </div>
-
-      <div class="feature-card">
-        <div class="feature-icon">🎓</div>
-        <h3>Gestion des Étudiants</h3>
-        <p>Inscrivez et suivez vos étudiants</p>
-      </div>
-
-      <div class="feature-card">
-        <div class="feature-icon">📖</div>
-        <h3>Gestion des Cours</h3>
-        <p>Organisez vos cours et emplois du temps</p>
-      </div>
-
-      <div class="feature-card">
-        <div class="feature-icon">📊</div>
-        <h3>Suivi et Rapports</h3>
-        <p>Consultez les statistiques et rapports</p>
-      </div>
-    </div>
+    <router-outlet />
   </main>
 
   <footer class="app-footer">
     <p>&copy; 2024 Système de Gestion de Cours - Développé avec Angular</p>
   </footer>
 </div>
-
-<router-outlet />
