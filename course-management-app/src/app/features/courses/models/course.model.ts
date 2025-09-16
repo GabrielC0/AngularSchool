@@ -4,9 +4,9 @@ export interface CourseCreateRequest {
   title: string;
   description: string;
   teacherId: string;
-  startDate: Date;
-  endDate: Date;
-  maxStudents: number;
+  startDate?: Date;
+  endDate?: Date;
+  maxStudents?: number;
   schedule: CourseScheduleRequest[];
 }
 
