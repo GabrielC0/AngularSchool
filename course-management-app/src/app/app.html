@@ -11,6 +11,21 @@
           class="px-3 py-2 rounded-lg border border-gray-300 text-gray-800 hover:bg-gray-50"
           >Accueil</a
         >
+        <ng-container *ngIf="isNavigating(); else roleAware"></ng-container>
+        <ng-template #roleAware>
+          <a
+            *ngIf="true"
+            routerLink="/courses"
+            class="px-3 py-2 rounded-lg border border-gray-300 text-gray-800 hover:bg-gray-50"
+            >Cours</a
+          >
+          <a
+            *ngIf="true"
+            routerLink="/professors"
+            class="px-3 py-2 rounded-lg border border-gray-300 text-gray-800 hover:bg-gray-50"
+            >Profs</a
+          >
+        </ng-template>
       </nav>
     </div>
   </header>
@@ -32,7 +47,7 @@
 
   <footer class="border-t border-gray-200 bg-white/80">
     <div class="max-w-6xl mx-auto px-6 py-4 text-sm text-gray-600">
-      <p>&copy; 2024 Système de Gestion de Cours - Développé avec Angular</p>
+      <p>&copy; 2025 Système de Gestion de Cours - Développé avec Angular</p>
     </div>
   </footer>
 </div>

@@ -36,14 +36,6 @@ import { RouterModule } from '@angular/router';
       <div
         class="rounded-xl border border-gray-200 bg-white p-5 text-center shadow-sm hover:shadow-md transition"
       >
-        <div class="text-4xl mb-2">🎓</div>
-        <h3 class="text-lg font-semibold text-black mb-1">Gestion des Étudiants</h3>
-        <p class="text-sm text-gray-600">Inscrivez et suivez vos étudiants</p>
-      </div>
-
-      <div
-        class="rounded-xl border border-gray-200 bg-white p-5 text-center shadow-sm hover:shadow-md transition"
-      >
         <div class="text-4xl mb-2">📖</div>
         <h3 class="text-lg font-semibold text-black mb-1">Gestion des Cours</h3>
         <p class="text-sm text-gray-600 mb-2">Organisez vos cours et emplois du temps</p>
