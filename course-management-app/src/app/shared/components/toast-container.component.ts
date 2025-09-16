@@ -1,4 +1,4 @@
-import { Component, DestroyRef, OnInit, inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ToastService, ToastMessage } from '../services/toast.service';
 
@@ -9,7 +9,7 @@ import { ToastService, ToastMessage } from '../services/toast.service';
   template: `
     <div class="toast-container">
       <div
-        *ngFor="let toast of toasts"
+        *ngFor="let toast of toasts$ | async"
         class="toast"
         [class.success]="toast.type === 'success'"
         [class.error]="toast.type === 'error'"
@@ -26,7 +26,7 @@ import { ToastService, ToastMessage } from '../services/toast.service';
     `
       .toast-container {
         position: fixed;
-        top: 16px;
+        bottom: 16px;
         right: 16px;
         display: flex;
         flex-direction: column;
@@ -60,14 +60,11 @@ import { ToastService, ToastMessage } from '../services/toast.service';
       }
     `,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ToastContainerComponent implements OnInit {
+export class ToastContainerComponent {
   private readonly toastService = inject(ToastService);
-  toasts: ToastMessage[] = [];
-
-  ngOnInit(): void {
-    this.toastService.toasts$.subscribe((list) => (this.toasts = list));
-  }
+  readonly toasts$ = this.toastService.toasts$;
 
   dismiss(id: number): void {
     this.toastService.dismiss(id);

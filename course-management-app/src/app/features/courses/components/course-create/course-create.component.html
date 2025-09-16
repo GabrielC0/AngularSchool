@@ -1,10 +1,12 @@
-<div class="course-create-container">
-  <div class="header">
-    <h1>Créer un nouveau cours</h1>
-    <p>Remplissez les informations ci-dessous pour créer un nouveau cours</p>
+<div class="course-create-container max-w-5xl mx-auto p-6">
+  <div class="header mb-6">
+    <h1 class="text-2xl font-semibold text-black">Créer un nouveau cours</h1>
+    <p class="text-sm text-gray-600">
+      Remplissez les informations ci-dessous pour créer un nouveau cours
+    </p>
   </div>
 
-  <form [formGroup]="courseForm" (ngSubmit)="onSubmit()" class="course-form">
+  <form [formGroup]="courseForm" (ngSubmit)="onSubmit()" class="course-form text-black">
     <!-- Error Message -->
     <div *ngIf="errorMessage" class="error-message">
       <i class="error-icon">⚠️</i>
@@ -12,12 +14,14 @@
     </div>
 
     <!-- Course Basic Information -->
-    <div class="form-section">
-      <h2>Informations générales</h2>
+    <div class="form-section bg-white/80 border border-gray-200 rounded-xl p-5 mb-6">
+      <h2 class="text-lg font-semibold mb-4 text-black">Informations générales</h2>
 
       <div class="form-row">
-        <div class="form-group">
-          <label for="title">Titre du cours *</label>
+        <div class="form-group w-full">
+          <label for="title" class="block text-sm font-medium mb-1 text-black"
+            >Titre du cours *</label
+          >
           <input
             type="text"
             id="title"
@@ -28,6 +32,7 @@
               hasError('title', 'minlength') ||
               hasError('title', 'maxlength')
             "
+            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <div
             *ngIf="
@@ -35,32 +40,40 @@
               hasError('title', 'minlength') ||
               hasError('title', 'maxlength')
             "
-            class="field-error"
+            class="field-error text-red-600 text-sm mt-1"
           >
             {{ getErrorMessage('title') }}
           </div>
         </div>
 
-        <div class="form-group">
-          <label for="teacherId">Professeur *</label>
+        <div class="form-group w-full">
+          <label for="teacherId" class="block text-sm font-medium mb-1 text-black"
+            >Professeur *</label
+          >
           <select
             id="teacherId"
             formControlName="teacherId"
             [class.error]="hasError('teacherId', 'required')"
+            class="w-full border border-gray-300 rounded-lg px-3 py-2 bg-white text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="">Sélectionner un professeur</option>
             <option value="teacher1">Prof. Martin Dubois</option>
             <option value="teacher2">Prof. Sophie Laurent</option>
             <option value="teacher3">Prof. Pierre Moreau</option>
           </select>
-          <div *ngIf="hasError('teacherId', 'required')" class="field-error">
+          <div
+            *ngIf="hasError('teacherId', 'required')"
+            class="field-error text-red-600 text-sm mt-1"
+          >
             {{ getErrorMessage('teacherId') }}
           </div>
         </div>
       </div>
 
       <div class="form-group">
-        <label for="description">Description (facultatif)</label>
+        <label for="description" class="block text-sm font-medium mb-1 text-black"
+          >Description (facultatif)</label
+        >
         <textarea
           id="description"
           formControlName="description"
@@ -69,10 +82,11 @@
           [class.error]="
             hasError('description', 'minlength') || hasError('description', 'maxlength')
           "
+          class="w-full border border-gray-300 rounded-lg px-3 py-2 text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
         ></textarea>
         <div
           *ngIf="hasError('description', 'minlength') || hasError('description', 'maxlength')"
-          class="field-error"
+          class="field-error text-red-600 text-sm mt-1"
         >
           {{ getErrorMessage('description') }}
         </div>
@@ -84,18 +98,16 @@
     <!-- Course Schedule -->
     <div class="form-section">
       <div class="section-header">
-        <h2>Planning du cours</h2>
+        <h2 class="text-lg font-semibold mb-4 text-black">Planning du cours</h2>
       </div>
 
       <div formArrayName="schedule" class="schedule-container">
         <div
           *ngIf="scheduleFormArray.length"
           [formGroupName]="0"
-          class="schedule-item"
-          [style.border]="scheduleValidated ? '1px solid #2ecc71' : '1px solid #f39c12'"
-          [style.background]="
-            scheduleValidated ? 'rgba(46, 204, 113, 0.08)' : 'rgba(243, 156, 18, 0.08)'
-          "
+          class="schedule-item border rounded-xl p-4"
+          [style.border]="scheduleValidated ? '1px solid #10b981' : '1px solid #f59e0b'"
+          [style.background]="scheduleValidated ? 'rgba(16,185,129,0.08)' : 'rgba(245,158,11,0.08)'"
           style="transition: background 0.2s ease, border-color 0.2s ease"
         >
           <div class="schedule-header">
@@ -104,11 +116,14 @@
 
           <div class="schedule-form-row">
             <div class="form-group">
-              <label for="dayOfWeek">Jour *</label>
+              <label for="dayOfWeek" class="block text-sm font-medium mb-1 text-black"
+                >Jour *</label
+              >
               <select
                 id="dayOfWeek"
                 formControlName="dayOfWeek"
                 [class.error]="hasScheduleError(0, 'dayOfWeek', 'required')"
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 bg-white text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="">Sélectionner un jour</option>
                 <option *ngFor="let day of daysOfWeek" [value]="day">
@@ -121,7 +136,9 @@
             </div>
 
             <div class="form-group">
-              <label for="startTime">Heure de début *</label>
+              <label for="startTime" class="block text-sm font-medium mb-1 text-black"
+                >Heure de début *</label
+              >
               <select
                 id="startTime"
                 formControlName="startTime"
@@ -129,6 +146,7 @@
                   hasScheduleError(0, 'startTime', 'required') ||
                   hasScheduleError(0, 'startTime', 'timeRange')
                 "
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 bg-white text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="">Sélectionner une heure</option>
                 <option *ngFor="let time of timeSlots" [value]="time">
@@ -140,14 +158,16 @@
                   hasScheduleError(0, 'startTime', 'required') ||
                   hasScheduleError(0, 'startTime', 'timeRange')
                 "
-                class="field-error"
+                class="field-error text-red-600 text-sm mt-1"
               >
                 {{ getErrorMessage('startTime') }}
               </div>
             </div>
 
             <div class="form-group">
-              <label for="endTime">Heure de fin *</label>
+              <label for="endTime" class="block text-sm font-medium mb-1 text-black"
+                >Heure de fin *</label
+              >
               <select
                 id="endTime"
                 formControlName="endTime"
@@ -155,6 +175,7 @@
                   hasScheduleError(0, 'endTime', 'required') ||
                   hasScheduleError(0, 'endTime', 'timeRange')
                 "
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 bg-white text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="">Sélectionner une heure</option>
                 <option *ngFor="let time of timeSlots" [value]="time">
@@ -166,14 +187,14 @@
                   hasScheduleError(0, 'endTime', 'required') ||
                   hasScheduleError(0, 'endTime', 'timeRange')
                 "
-                class="field-error"
+                class="field-error text-red-600 text-sm mt-1"
               >
                 {{ getErrorMessage('endTime') }}
               </div>
             </div>
 
             <div class="form-group">
-              <label for="room">Salle *</label>
+              <label for="room" class="block text-sm font-medium mb-1 text-black">Salle *</label>
               <input
                 type="text"
                 id="room"
@@ -184,6 +205,7 @@
                   hasScheduleError(0, 'room', 'minlength') ||
                   hasScheduleError(0, 'room', 'maxlength')
                 "
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
               <div
                 *ngIf="
@@ -191,17 +213,14 @@
                   hasScheduleError(0, 'room', 'minlength') ||
                   hasScheduleError(0, 'room', 'maxlength')
                 "
-                class="field-error"
+                class="field-error text-red-600 text-sm mt-1"
               >
                 {{ getErrorMessage('room') }}
               </div>
             </div>
           </div>
 
-          <div
-            class="form-actions"
-            style="margin-top: 1rem; display: flex; align-items: center; gap: 12px"
-          >
+          <div class="form-actions mt-4 flex items-center gap-3">
             <span
               class="status-area"
               style="min-width: 220px; display: inline-block"
@@ -228,7 +247,7 @@
             <button
               *ngIf="!scheduleValidated || hasScheduleGroupError(0, 'timeRange')"
               type="button"
-              class="btn btn-primary"
+              class="bg-blue-600 text-white rounded-lg px-4 py-2 hover:bg-blue-700"
               (click)="validateSchedule(0)"
             >
               Valider le créneau
@@ -236,7 +255,7 @@
             <button
               *ngIf="scheduleValidated && !hasScheduleGroupError(0, 'timeRange')"
               type="button"
-              class="btn btn-secondary"
+              class="bg-white text-gray-700 border border-gray-300 rounded-lg px-4 py-2 hover:bg-gray-50"
               (click)="editSchedule(0)"
             >
               Modifier le créneau
@@ -251,13 +270,18 @@
     </div>
 
     <!-- Form Actions -->
-    <div class="form-actions">
-      <button type="button" (click)="onCancel()" class="btn btn-secondary" [disabled]="isLoading">
+    <div class="form-actions mt-6 flex justify-end gap-3">
+      <button
+        type="button"
+        (click)="onCancel()"
+        class="bg-white text-gray-700 border border-gray-300 rounded-lg px-4 py-2 hover:bg-gray-50"
+        [disabled]="isLoading"
+      >
         Annuler
       </button>
       <button
         type="submit"
-        class="btn btn-primary"
+        class="bg-blue-600 text-white rounded-lg px-4 py-2 hover:bg-blue-700"
         [disabled]="
           isLoading ||
           courseForm.invalid ||

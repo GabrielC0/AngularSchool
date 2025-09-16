@@ -16,4 +16,8 @@ export class CoursesService extends BaseApiService {
   }): Observable<CourseListResponse> {
     return this.get<CourseListResponse>('/courses', params);
   }
+
+  deleteCourse(id: string): Observable<void> {
+    return this.delete<void>(`/courses/${id}`);
+  }
 }

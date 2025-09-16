@@ -1,19 +1,30 @@
-<div class="app-container">
-  <header class="app-header">
-    <h1>📚 Système de Gestion de Cours</h1>
-    <p>Gérez vos cours, étudiants et professeurs facilement</p>
-    <nav class="app-nav">
-      <a routerLink="/courses" class="nav-link">Cours</a>
-      <a routerLink="/courses/create" class="nav-link">Créer un cours</a>
-    </nav>
+<div class="min-h-screen flex flex-col bg-gradient-to-b from-indigo-50/60 to-white text-black">
+  <header class="border-b border-gray-200 bg-white/80 backdrop-blur">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div>
+        <h1 class="text-xl font-semibold">📚 Système de Gestion de Cours</h1>
+        <p class="text-sm text-gray-600">Gérez vos cours, étudiants et professeurs facilement</p>
+      </div>
+      <nav class="flex items-center gap-3">
+        <a
+          routerLink="/"
+          class="px-3 py-2 rounded-lg border border-gray-300 text-gray-800 hover:bg-gray-50"
+          >Accueil</a
+        >
+      </nav>
+    </div>
   </header>
 
-  <main class="app-main">
-    <router-outlet />
-    <app-toast-container />
+  <main class="flex-1">
+    <div class="max-w-6xl mx-auto px-6 py-6">
+      <router-outlet />
+      <app-toast-container />
+    </div>
   </main>
 
-  <footer class="app-footer">
-    <p>&copy; 2024 Système de Gestion de Cours - Développé avec Angular</p>
+  <footer class="border-t border-gray-200 bg-white/80">
+    <div class="max-w-6xl mx-auto px-6 py-4 text-sm text-gray-600">
+      <p>&copy; 2024 Système de Gestion de Cours - Développé avec Angular</p>
+    </div>
   </footer>
 </div>
