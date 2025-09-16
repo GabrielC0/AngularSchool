@@ -5,32 +5,6 @@
   </div>
 
   <form [formGroup]="courseForm" (ngSubmit)="onSubmit()" class="course-form">
-    <!-- Toast Notification -->
-    <div
-      *ngIf="toastMessage"
-      [style.background]="
-        toastType === 'success'
-          ? 'rgba(46,204,113,.15)'
-          : toastType === 'error'
-          ? 'rgba(231,76,60,.15)'
-          : 'rgba(149,165,166,.15)'
-      "
-      [style.border]="
-        toastType === 'success'
-          ? '1px solid #2ecc71'
-          : toastType === 'error'
-          ? '1px solid #e74c3c'
-          : '1px solid #95a5a6'
-      "
-      [style.color]="
-        toastType === 'success' ? '#2ecc71' : toastType === 'error' ? '#e74c3c' : '#2c3e50'
-      "
-      style="padding: 0.75rem 1rem; border-radius: 8px; margin-bottom: 1rem"
-      role="status"
-      aria-live="polite"
-    >
-      {{ toastMessage }}
-    </div>
     <!-- Error Message -->
     <div *ngIf="errorMessage" class="error-message">
       <i class="error-icon">⚠️</i>

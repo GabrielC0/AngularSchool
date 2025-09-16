@@ -30,9 +30,7 @@
                 "input": "public"
               }
             ],
-            "styles": [
-              "src/styles.scss"
-            ],
+            "styles": ["src/styles.scss"],
             "outputMode": "static"
           },
           "configurations": {
@@ -66,7 +64,8 @@
               "buildTarget": "course-management-app:build:production"
             },
             "development": {
-              "buildTarget": "course-management-app:build:development"
+              "buildTarget": "course-management-app:build:development",
+              "proxyConfig": "proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"
@@ -85,9 +84,7 @@
                 "input": "public"
               }
             ],
-            "styles": [
-              "src/styles.scss"
-            ]
+            "styles": ["src/styles.scss"]
           }
         }
       }

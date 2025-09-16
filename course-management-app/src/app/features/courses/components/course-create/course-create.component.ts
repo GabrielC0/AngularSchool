@@ -34,9 +34,6 @@ export class CourseCreateComponent implements OnInit, OnDestroy {
   errorMessage: string | null = null;
   private destroy$ = new Subject<void>();
   scheduleValidated = false;
-  toastMessage: string | null = null;
-  toastType: 'success' | 'error' | 'info' = 'info';
-  private toastTimer: any;
 
   // Available days for course schedule
   readonly daysOfWeek = Object.values(DayOfWeek);

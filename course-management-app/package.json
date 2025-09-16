@@ -3,7 +3,9 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve -c development --proxy-config proxy.conf.json",
+    "api": "nodemon --watch api --ext js --exec node api/server.js",
+    "dev": "concurrently \"npm run api\" \"npm start\"",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
@@ -37,6 +39,8 @@
     "tslib": "^2.3.0"
   },
   "devDependencies": {
+    "concurrently": "^9.1.2",
+    "nodemon": "^3.1.7",
     "@angular/build": "^20.2.1",
     "@angular/cli": "^20.2.1",
     "@angular/compiler-cli": "^20.2.0",
