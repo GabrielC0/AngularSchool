@@ -22,20 +22,31 @@ interface CalendarEvent {
         <select
           [(ngModel)]="selectedTeacher"
           class="ml-auto border border-gray-300 rounded-lg px-3 py-2"
-          (ngModelChange)="buildWeek()"
+          (ngModelChange)="onTeacherChange()"
         >
           <option value="">Tous les profs</option>
           <option *ngFor="let t of teachers" [value]="t">{{ t }}</option>
         </select>
       </div>
 
-      <div class="grid grid-cols-7 gap-3">
-        <div class="text-center text-gray-600" *ngFor="let d of weekDays">{{ d }}</div>
-        <ng-container *ngFor="let day of calendar">
+      <div *ngIf="isLoading" class="flex items-center justify-center py-10">
+        <span class="inline-flex items-center gap-3 text-gray-600">
+          <span
+            class="inline-block h-5 w-5 border-2 border-gray-400 border-t-transparent rounded-full animate-spin"
+          ></span>
+          Chargement des données...
+        </span>
+      </div>
+
+      <div *ngIf="!isLoading" class="grid grid-cols-7 gap-3">
+        <div class="text-center text-gray-600" *ngFor="let d of weekDays; trackBy: trackByIndex">
+          {{ d }}
+        </div>
+        <ng-container *ngFor="let day of calendar; trackBy: trackByIndex">
           <div class="min-h-[280px] border border-gray-200 rounded-lg p-2 bg-white">
             <div class="space-y-1 max-h-64 overflow-auto">
               <div
-                *ngFor="let ev of day.events"
+                *ngFor="let ev of day.events; trackBy: trackByEvent"
                 class="text-xs rounded px-2 py-1"
                 [ngStyle]="getStyleForTeacher(ev.teacher)"
               >
@@ -57,6 +68,8 @@ export class ReportsComponent implements OnInit {
   calendar: Array<{ label: string; events: CalendarEvent[] }> = [];
   teachers: string[] = [];
   selectedTeacher = '';
+  isLoading = true;
+  private allCourses: any[] = [];
 
   // Palette douce et lisible (fond/bordure/texte)
   private colorPalette = [
@@ -74,47 +87,69 @@ export class ReportsComponent implements OnInit {
   constructor(private api: CoursesService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
-    this.buildWeek();
+    this.loadCourses();
   }
 
-  buildWeek(): void {
-    const days = this.weekDays.map((d) => ({ label: d, events: [] as CalendarEvent[] }));
-    this.api.listCourses({ page: 1, limit: 200 }).subscribe((res) => {
-      const teacherSet = new Set<string>();
-      (res.courses || []).forEach((c) => {
-        (c.schedule || []).forEach((s) => {
-          const idx = [
-            'monday',
-            'tuesday',
-            'wednesday',
-            'thursday',
-            'friday',
-            'saturday',
-            'sunday',
-          ].indexOf(String(s.dayOfWeek));
-          if (idx >= 0) {
-            const ev: CalendarEvent = {
-              title: c.title,
-              time: `${s.startTime}–${s.endTime}`,
-              teacher: c.teacherName,
-              room: s.room,
-            };
-            if (!this.selectedTeacher || ev.teacher === this.selectedTeacher) {
-              days[idx].events.push(ev);
-            }
-            if (c.teacherName) teacherSet.add(c.teacherName);
-          }
-        });
-      });
-      this.teachers = Array.from(teacherSet).sort();
-      // Mettre à jour la map couleur de façon stable sur l'ordre alphabétique
-      this.teacherColorMap.clear();
-      this.teachers.forEach((t, i) => this.teacherColorMap.set(t, i % this.colorPalette.length));
-      days.forEach((d) => d.events.sort((a, b) => a.time.localeCompare(b.time)));
-      this.calendar = days;
-      this.cdr.detectChanges();
+  private loadCourses(): void {
+    this.isLoading = true;
+    this.api.listCourses({ page: 1, limit: 200 }).subscribe({
+      next: (res) => {
+        this.allCourses = res.courses || [];
+        this.rebuildCalendarFromCourses(this.allCourses);
+        this.isLoading = false;
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.allCourses = [];
+        this.calendar = this.weekDays.map((d) => ({ label: d, events: [] as CalendarEvent[] }));
+        this.isLoading = false;
+        this.cdr.detectChanges();
+      },
     });
   }
+
+  onTeacherChange(): void {
+    this.rebuildCalendarFromCourses(this.allCourses);
+  }
+
+  private rebuildCalendarFromCourses(courses: any[]): void {
+    const days = this.weekDays.map((d) => ({ label: d, events: [] as CalendarEvent[] }));
+    const teacherSet = new Set<string>();
+    (courses || []).forEach((c) => {
+      (c.schedule || []).forEach((s: any) => {
+        const idx = [
+          'monday',
+          'tuesday',
+          'wednesday',
+          'thursday',
+          'friday',
+          'saturday',
+          'sunday',
+        ].indexOf(String(s.dayOfWeek));
+        if (idx >= 0) {
+          const ev: CalendarEvent = {
+            title: c.title,
+            time: `${s.startTime}–${s.endTime}`,
+            teacher: c.teacherName,
+            room: s.room,
+          };
+          if (!this.selectedTeacher || ev.teacher === this.selectedTeacher) {
+            days[idx].events.push(ev);
+          }
+          if (c.teacherName) teacherSet.add(c.teacherName);
+        }
+      });
+    });
+    this.teachers = Array.from(teacherSet).sort();
+    this.teacherColorMap.clear();
+    this.teachers.forEach((t, i) => this.teacherColorMap.set(t, i % this.colorPalette.length));
+    days.forEach((d) => d.events.sort((a, b) => a.time.localeCompare(b.time)));
+    this.calendar = days;
+  }
+
+  trackByIndex = (_: number, item: any) => item;
+  trackByEvent = (_: number, ev: CalendarEvent) =>
+    `${ev.title}-${ev.time}-${ev.teacher}-${ev.room}`;
 
   getStyleForTeacher(teacher?: string) {
     if (!teacher) {
