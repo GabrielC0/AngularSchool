@@ -32,6 +32,13 @@
               hasError('title', 'minlength') ||
               hasError('title', 'maxlength')
             "
+            [attr.aria-invalid]="
+              hasError('title', 'required') ||
+              hasError('title', 'minlength') ||
+              hasError('title', 'maxlength')
+                ? 'true'
+                : 'false'
+            "
             class="w-full border border-gray-300 rounded-lg px-3 py-2 text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <div
@@ -55,6 +62,7 @@
             id="teacherId"
             formControlName="teacherId"
             [class.error]="hasError('teacherId', 'required')"
+            [attr.aria-invalid]="hasError('teacherId', 'required') ? 'true' : 'false'"
             class="w-full border border-gray-300 rounded-lg px-3 py-2 bg-white text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="">Sélectionner un professeur</option>
@@ -83,6 +91,11 @@
           rows="4"
           [class.error]="
             hasError('description', 'minlength') || hasError('description', 'maxlength')
+          "
+          [attr.aria-invalid]="
+            hasError('description', 'minlength') || hasError('description', 'maxlength')
+              ? 'true'
+              : 'false'
           "
           class="w-full border border-gray-300 rounded-lg px-3 py-2 text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
         ></textarea>
@@ -125,6 +138,9 @@
                 id="dayOfWeek"
                 formControlName="dayOfWeek"
                 [class.error]="hasScheduleError(0, 'dayOfWeek', 'required')"
+                [attr.aria-invalid]="
+                  hasScheduleError(0, 'dayOfWeek', 'required') ? 'true' : 'false'
+                "
                 class="w-full border border-gray-300 rounded-lg px-3 py-2 bg-white text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="">Sélectionner un jour</option>
@@ -147,6 +163,12 @@
                 [class.error]="
                   hasScheduleError(0, 'startTime', 'required') ||
                   hasScheduleError(0, 'startTime', 'timeRange')
+                "
+                [attr.aria-invalid]="
+                  hasScheduleError(0, 'startTime', 'required') ||
+                  hasScheduleError(0, 'startTime', 'timeRange')
+                    ? 'true'
+                    : 'false'
                 "
                 class="w-full border border-gray-300 rounded-lg px-3 py-2 bg-white text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
@@ -177,6 +199,12 @@
                   hasScheduleError(0, 'endTime', 'required') ||
                   hasScheduleError(0, 'endTime', 'timeRange')
                 "
+                [attr.aria-invalid]="
+                  hasScheduleError(0, 'endTime', 'required') ||
+                  hasScheduleError(0, 'endTime', 'timeRange')
+                    ? 'true'
+                    : 'false'
+                "
                 class="w-full border border-gray-300 rounded-lg px-3 py-2 bg-white text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="">Sélectionner une heure</option>
@@ -206,6 +234,13 @@
                   hasScheduleError(0, 'room', 'required') ||
                   hasScheduleError(0, 'room', 'minlength') ||
                   hasScheduleError(0, 'room', 'maxlength')
+                "
+                [attr.aria-invalid]="
+                  hasScheduleError(0, 'room', 'required') ||
+                  hasScheduleError(0, 'room', 'minlength') ||
+                  hasScheduleError(0, 'room', 'maxlength')
+                    ? 'true'
+                    : 'false'
                 "
                 class="w-full border border-gray-300 rounded-lg px-3 py-2 text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />

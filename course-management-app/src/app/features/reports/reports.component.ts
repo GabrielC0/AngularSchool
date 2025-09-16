@@ -2,6 +2,7 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CoursesService } from '../courses/services/courses.service';
+import { Course, CourseSchedule } from '../../shared/models/course.model';
 
 interface CalendarEvent {
   title: string;
@@ -15,7 +16,7 @@ interface CalendarEvent {
   standalone: true,
   imports: [CommonModule, FormsModule],
   template: `
-    <div class="max-w-6xl mx-auto p-6">
+    <div class="max-w-6xl mx-auto p-6" [attr.aria-busy]="isLoading" aria-live="polite">
       <h1 class="text-xl font-semibold text-black mb-4">Suivi et Rapports</h1>
       <div class="flex items-center gap-3 mb-4">
         <div class="text-black font-semibold">Semaine</div>
@@ -23,13 +24,19 @@ interface CalendarEvent {
           [(ngModel)]="selectedTeacher"
           class="ml-auto border border-gray-300 rounded-lg px-3 py-2"
           (ngModelChange)="onTeacherChange()"
+          aria-label="Filtrer par professeur"
         >
           <option value="">Tous les profs</option>
           <option *ngFor="let t of teachers" [value]="t">{{ t }}</option>
         </select>
       </div>
 
-      <div *ngIf="isLoading" class="flex items-center justify-center py-10">
+      <div
+        *ngIf="isLoading"
+        class="flex items-center justify-center py-10"
+        role="status"
+        aria-live="polite"
+      >
         <span class="inline-flex items-center gap-3 text-gray-600">
           <span
             class="inline-block h-5 w-5 border-2 border-gray-400 border-t-transparent rounded-full animate-spin"
@@ -50,8 +57,20 @@ interface CalendarEvent {
                 class="text-xs rounded px-2 py-1"
                 [ngStyle]="getStyleForTeacher(ev.teacher)"
               >
-                <div class="font-medium truncate">{{ ev.title }}</div>
-                <div class="opacity-80">
+                <div class="font-medium truncate" [attr.aria-label]="'Cours: ' + ev.title">
+                  {{ ev.title }}
+                </div>
+                <div
+                  class="opacity-80"
+                  [attr.aria-label]="
+                    'Horaire: ' +
+                    ev.time +
+                    ', Prof: ' +
+                    (ev.teacher || 'Non défini') +
+                    ', Salle: ' +
+                    (ev.room || 'Non définie')
+                  "
+                >
                   {{ ev.time }} · {{ ev.teacher || '—' }} · {{ ev.room || '—' }}
                 </div>
               </div>
@@ -69,7 +88,7 @@ export class ReportsComponent implements OnInit {
   teachers: string[] = [];
   selectedTeacher = '';
   isLoading = true;
-  private allCourses: any[] = [];
+  private allCourses: Course[] = [];
 
   // Palette douce et lisible (fond/bordure/texte)
   private colorPalette = [
@@ -112,11 +131,11 @@ export class ReportsComponent implements OnInit {
     this.rebuildCalendarFromCourses(this.allCourses);
   }
 
-  private rebuildCalendarFromCourses(courses: any[]): void {
+  private rebuildCalendarFromCourses(courses: Course[]): void {
     const days = this.weekDays.map((d) => ({ label: d, events: [] as CalendarEvent[] }));
     const teacherSet = new Set<string>();
     (courses || []).forEach((c) => {
-      (c.schedule || []).forEach((s: any) => {
+      (c.schedule || []).forEach((s: CourseSchedule) => {
         const idx = [
           'monday',
           'tuesday',
@@ -147,7 +166,7 @@ export class ReportsComponent implements OnInit {
     this.calendar = days;
   }
 
-  trackByIndex = (_: number, item: any) => item;
+  trackByIndex = (index: number) => index;
   trackByEvent = (_: number, ev: CalendarEvent) =>
     `${ev.title}-${ev.time}-${ev.teacher}-${ev.room}`;
 
