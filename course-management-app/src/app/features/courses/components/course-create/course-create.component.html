@@ -234,6 +234,7 @@
                   : '#95a5a6'
               "
             >
+              <ng-container *ngIf="isCheckingSchedule"> Vérification du créneau... </ng-container>
               <ng-container *ngIf="hasScheduleGroupError(0, 'timeRange'); else nonErrorMsg">
                 {{ getScheduleGroupErrorMessage(0) }}
               </ng-container>
@@ -249,10 +250,17 @@
             <button
               *ngIf="!scheduleValidated || hasScheduleGroupError(0, 'timeRange')"
               type="button"
-              class="bg-blue-600 text-white rounded-lg px-4 py-2 hover:bg-blue-700"
+              class="bg-blue-600 text-white rounded-lg px-4 py-2 hover:bg-blue-700 disabled:opacity-60 disabled:cursor-not-allowed"
+              [disabled]="isCheckingSchedule"
               (click)="validateSchedule(0)"
             >
-              Valider le créneau
+              <span *ngIf="!isCheckingSchedule">Valider le créneau</span>
+              <span *ngIf="isCheckingSchedule" class="inline-flex items-center gap-2">
+                <span
+                  class="inline-block h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin"
+                ></span>
+                Vérification...
+              </span>
             </button>
             <button
               *ngIf="scheduleValidated && !hasScheduleGroupError(0, 'timeRange')"

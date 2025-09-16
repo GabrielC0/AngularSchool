@@ -35,6 +35,7 @@ export class CourseCreateComponent implements OnInit, OnDestroy {
   errorMessage: string | null = null;
   private destroy$ = new Subject<void>();
   scheduleValidated = false;
+  isCheckingSchedule = false;
   professors: Professor[] = [];
   isProfessorsLoading = false;
   private isProfessorsLoaded = false;
@@ -61,13 +62,6 @@ export class CourseCreateComponent implements OnInit, OnDestroy {
     '15:00',
     '15:30',
     '16:00',
-    '16:30',
-    '17:00',
-    '17:30',
-    '18:00',
-    '18:30',
-    '19:00',
-    '19:30',
   ];
 
   constructor(
@@ -215,13 +209,14 @@ export class CourseCreateComponent implements OnInit, OnDestroy {
       this.toast.info('Complétez le créneau avant validation');
       return;
     }
-    this.isLoading = true;
+    this.isCheckingSchedule = true;
+    this.scheduleValidated = false;
     this.coursesService
       .checkConflict({ teacherId, dayOfWeek, startTime, endTime, room })
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (res) => {
-          this.isLoading = false;
+          this.isCheckingSchedule = false;
           if (res.conflict) {
             this.scheduleValidated = false;
             const reasons = res.reasons || [];
@@ -234,7 +229,7 @@ export class CourseCreateComponent implements OnInit, OnDestroy {
           }
         },
         error: () => {
-          this.isLoading = false;
+          this.isCheckingSchedule = false;
           this.toast.error('Vérification indisponible');
         },
       });

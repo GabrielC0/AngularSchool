@@ -51,7 +51,12 @@ import { RouterModule } from '@angular/router';
       >
         <div class="text-4xl mb-2">📊</div>
         <h3 class="text-lg font-semibold text-black mb-1">Suivi et Rapports</h3>
-        <p class="text-sm text-gray-600">Consultez les statistiques et rapports</p>
+        <p class="text-sm text-gray-600 mb-2">Consultez les statistiques et rapports</p>
+        <a
+          routerLink="/reports"
+          class="inline-block px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700"
+          >Ouvrir l'agenda</a
+        >
       </div>
     </section>
   `,
