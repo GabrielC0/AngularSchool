@@ -13,6 +13,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { CourseCreateRequest, CourseScheduleRequest } from '../../models/course.model';
 import { CoursesService } from '../../services/courses.service';
+import { ProfessorsService, Professor } from '../../services/professors.service';
 import { ToastService } from '../../../../shared/services/toast.service';
 import { DayOfWeek } from '../../../../shared/models/course.model';
 import { APP_CONSTANTS } from '../../../../shared/constants/app.constants';
@@ -34,6 +35,9 @@ export class CourseCreateComponent implements OnInit, OnDestroy {
   errorMessage: string | null = null;
   private destroy$ = new Subject<void>();
   scheduleValidated = false;
+  professors: Professor[] = [];
+  isProfessorsLoading = false;
+  private isProfessorsLoaded = false;
 
   // Available days for course schedule
   readonly daysOfWeek = Object.values(DayOfWeek);
@@ -70,7 +74,8 @@ export class CourseCreateComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private router: Router,
     private coursesService: CoursesService,
-    private toast: ToastService
+    private toast: ToastService,
+    private professorsService: ProfessorsService
   ) {}
 
   ngOnInit(): void {
@@ -119,6 +124,30 @@ export class CourseCreateComponent implements OnInit, OnDestroy {
     scheduleGroup.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.scheduleValidated = false;
     });
+  }
+
+  private loadProfessors(): void {
+    this.isProfessorsLoading = true;
+    this.professorsService
+      .list()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res) => {
+          this.professors = res.professors || [];
+          this.isProfessorsLoading = false;
+          this.isProfessorsLoaded = true;
+        },
+        error: () => {
+          this.isProfessorsLoading = false;
+          this.toast.error('Chargement des profs échoué');
+        },
+      });
+  }
+
+  ensureProfessorsLoaded(): void {
+    if (!this.isProfessorsLoaded && !this.isProfessorsLoading) {
+      this.loadProfessors();
+    }
   }
 
   /**

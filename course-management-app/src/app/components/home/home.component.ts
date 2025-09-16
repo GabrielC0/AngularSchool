@@ -25,7 +25,12 @@ import { RouterModule } from '@angular/router';
       >
         <div class="text-4xl mb-2">👨‍🏫</div>
         <h3 class="text-lg font-semibold text-black mb-1">Gestion des Professeurs</h3>
-        <p class="text-sm text-gray-600">Créez et gérez les profils des professeurs</p>
+        <p class="text-sm text-gray-600 mb-2">Créez et gérez les profils des professeurs</p>
+        <a
+          routerLink="/professors"
+          class="inline-block px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700"
+          >Gérer les profs</a
+        >
       </div>
 
       <div

@@ -27,6 +27,7 @@ app.use((req, _res, next) => {
 // In-memory DB
 const db = {
     courses: [],
+    professors: [],
 };
 
 // Helpers
@@ -38,6 +39,28 @@ function generateId() {
 app.get('/api/health', (_req, res) => {
     res.json({ status: 'ok' });
 });
+// Professors API
+app.get('/api/professors', (_req, res) => {
+    res.json({ professors: db.professors });
+});
+
+app.post('/api/professors', (req, res) => {
+    const { name } = req.body || {};
+    if (!name || typeof name !== 'string' || name.trim().length < 2) {
+        return res.status(400).json({ message: 'Invalid name' });
+    }
+    const prof = { id: generateId(), name: name.trim(), createdAt: new Date() };
+    db.professors.unshift(prof);
+    res.status(201).json(prof);
+});
+
+app.delete('/api/professors/:id', (req, res) => {
+    const idx = db.professors.findIndex(p => p.id === req.params.id);
+    if (idx === -1) return res.status(404).json({ message: 'Not found' });
+    const removed = db.professors.splice(idx, 1)[0];
+    res.json(removed);
+});
+
 
 // Root for quick sanity check
 app.get('/', (_req, res) => {

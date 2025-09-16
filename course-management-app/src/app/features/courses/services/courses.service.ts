@@ -1,12 +1,17 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, shareReplay, tap } from 'rxjs';
 import { BaseApiService } from '../../../shared/services/base-api.service';
 import { CourseCreateRequest, CourseListResponse } from '../models/course.model';
 
 @Injectable({ providedIn: 'root' })
 export class CoursesService extends BaseApiService {
+  private listCache$?: Observable<CourseListResponse>;
   createCourse(payload: CourseCreateRequest): Observable<void> {
-    return this.post<void>('/courses', payload);
+    return this.post<void>('/courses', payload).pipe(
+      tap(() => {
+        this.listCache$ = undefined;
+      })
+    );
   }
 
   listCourses(params?: {
@@ -14,10 +19,22 @@ export class CoursesService extends BaseApiService {
     limit?: number;
     search?: string;
   }): Observable<CourseListResponse> {
-    return this.get<CourseListResponse>('/courses', params);
+    const isDefault = !params || (params.page === 1 && params.limit === 20 && !params.search);
+    if (isDefault && this.listCache$) {
+      return this.listCache$;
+    }
+    const obs = this.get<CourseListResponse>('/courses', params).pipe(shareReplay(1));
+    if (isDefault) {
+      this.listCache$ = obs;
+    }
+    return obs;
   }
 
   deleteCourse(id: string): Observable<void> {
-    return this.delete<void>(`/courses/${id}`);
+    return this.delete<void>(`/courses/${id}`).pipe(
+      tap(() => {
+        this.listCache$ = undefined;
+      })
+    );
   }
 }
