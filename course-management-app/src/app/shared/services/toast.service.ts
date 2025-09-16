@@ -15,7 +15,7 @@ export class ToastService {
   private readonly toastsSubject = new BehaviorSubject<ToastMessage[]>([]);
   readonly toasts$ = this.toastsSubject.asObservable();
   private nextId = 1;
-  private activeTimers = new Map<number, any>();
+  private activeTimers = new Map<number, ReturnType<typeof setTimeout>>();
 
   show(text: string, type: ToastType = 'info', timeoutMs: number = 3000): void {
     // Durée max 3s et un seul toast visible à la fois

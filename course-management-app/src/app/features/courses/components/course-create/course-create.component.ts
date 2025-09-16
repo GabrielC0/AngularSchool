@@ -11,7 +11,7 @@ import {
 import { Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { CourseCreateRequest, CourseScheduleRequest } from '../../models/course.model';
+import { CourseCreateRequest } from '../../models/course.model';
 import { CoursesService } from '../../services/courses.service';
 import { ProfessorsService, Professor } from '../../services/professors.service';
 import { ToastService } from '../../../../shared/services/toast.service';
@@ -282,12 +282,14 @@ export class CourseCreateComponent implements OnInit, OnDestroy {
         title: formValue.title,
         description: formValue.description,
         teacherId: formValue.teacherId,
-        schedule: (scheduleRaw || []).map((s: any) => ({
-          dayOfWeek: s.dayOfWeek,
-          startTime: s.startTime,
-          endTime: s.endTime,
-          room: s.room,
-        })),
+        schedule: (scheduleRaw || []).map(
+          (s: { dayOfWeek: DayOfWeek; startTime: string; endTime: string; room: string }) => ({
+            dayOfWeek: s.dayOfWeek,
+            startTime: s.startTime,
+            endTime: s.endTime,
+            room: s.room,
+          })
+        ),
       };
 
       // Simulate API call

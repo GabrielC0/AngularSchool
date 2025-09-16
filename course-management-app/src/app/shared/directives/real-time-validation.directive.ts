@@ -1,5 +1,5 @@
 import { Directive, ElementRef, Input, OnInit, OnDestroy, Renderer2 } from '@angular/core';
-import { AbstractControl, NgControl } from '@angular/forms';
+import { NgControl } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 
 /**
@@ -8,14 +8,13 @@ import { Subject, takeUntil } from 'rxjs';
  */
 @Directive({
   selector: '[appRealTimeValidation]',
-  standalone: true
+  standalone: true,
 })
 export class RealTimeValidationDirective implements OnInit, OnDestroy {
-  
   @Input() errorMessage: string = '';
   @Input() showErrorOnBlur: boolean = true;
   @Input() showErrorOnType: boolean = false;
-  
+
   private destroy$ = new Subject<void>();
   private errorElement: HTMLElement | null = null;
   private isFocused: boolean = false;
@@ -42,21 +41,21 @@ export class RealTimeValidationDirective implements OnInit, OnDestroy {
    */
   private setupValidation(): void {
     const element = this.elementRef.nativeElement;
-    
+
     // Add base validation classes
     this.renderer.addClass(element, 'validation-control');
-    
+
     // Add focus/blur event listeners
     this.renderer.listen(element, 'focus', () => {
       this.isFocused = true;
       this.updateValidationState();
     });
-    
+
     this.renderer.listen(element, 'blur', () => {
       this.isFocused = false;
       this.updateValidationState();
     });
-    
+
     // Add input event listener for real-time validation
     if (this.showErrorOnType) {
       this.renderer.listen(element, 'input', () => {
@@ -76,20 +75,16 @@ export class RealTimeValidationDirective implements OnInit, OnDestroy {
     const control = this.ngControl.control;
 
     // Subscribe to value changes for real-time validation
-    control.valueChanges
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
-        if (this.showErrorOnType) {
-          this.updateValidationState();
-        }
-      });
+    control.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      if (this.showErrorOnType) {
+        this.updateValidationState();
+      }
+    });
 
     // Subscribe to status changes
-    control.statusChanges
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
-        this.updateValidationState();
-      });
+    control.statusChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      this.updateValidationState();
+    });
   }
 
   /**
@@ -106,14 +101,14 @@ export class RealTimeValidationDirective implements OnInit, OnDestroy {
     const hasErrors = control.errors && Object.keys(control.errors).length > 0;
 
     // Determine if we should show errors
-    const shouldShowError = hasErrors && (
-      (this.showErrorOnBlur && !this.isFocused && (isTouched || isDirty)) ||
-      (this.showErrorOnType && (isTouched || isDirty))
-    );
+    const shouldShowError =
+      hasErrors &&
+      ((this.showErrorOnBlur && !this.isFocused && (isTouched || isDirty)) ||
+        (this.showErrorOnType && (isTouched || isDirty)));
 
     // Update visual state
     this.updateVisualState(element, isValid, shouldShowError || false);
-    
+
     // Update error message
     if (shouldShowError) {
       this.showErrorMessage(control.errors);
@@ -142,12 +137,12 @@ export class RealTimeValidationDirective implements OnInit, OnDestroy {
   /**
    * Show error message below the form control
    */
-  private showErrorMessage(errors: any): void {
+  private showErrorMessage(errors: Record<string, unknown>): void {
     if (!errors || this.errorElement) return;
 
     const element = this.elementRef.nativeElement;
     const errorMessage = this.getErrorMessage(errors);
-    
+
     if (!errorMessage) return;
 
     // Create error element
@@ -158,7 +153,7 @@ export class RealTimeValidationDirective implements OnInit, OnDestroy {
     // Insert error element after the form control
     const parent = this.renderer.parentNode(element);
     const nextSibling = this.renderer.nextSibling(element);
-    
+
     if (nextSibling) {
       this.renderer.insertBefore(parent, this.errorElement, nextSibling);
     } else {
@@ -178,10 +173,7 @@ export class RealTimeValidationDirective implements OnInit, OnDestroy {
    */
   private cleanupErrorElement(): void {
     if (this.errorElement) {
-      this.renderer.removeChild(
-        this.renderer.parentNode(this.errorElement),
-        this.errorElement
-      );
+      this.renderer.removeChild(this.renderer.parentNode(this.errorElement), this.errorElement);
       this.errorElement = null;
     }
   }
@@ -189,7 +181,7 @@ export class RealTimeValidationDirective implements OnInit, OnDestroy {
   /**
    * Get error message based on validation errors
    */
-  private getErrorMessage(errors: any): string {
+  private getErrorMessage(errors: Record<string, unknown>): string {
     if (!errors) return '';
 
     // Use custom error message if provided
@@ -205,11 +197,11 @@ export class RealTimeValidationDirective implements OnInit, OnDestroy {
       maxlength: `Maximum ${errors.maxlength.requiredLength} caractères autorisés`,
       min: `La valeur doit être au moins ${errors.min.min}`,
       max: `La valeur ne peut pas dépasser ${errors.max.max}`,
-      pattern: 'Le format n\'est pas valide',
+      pattern: "Le format n'est pas valide",
       futureDate: 'La date doit être dans le futur',
       dateRange: 'La date de fin doit être après la date de début',
-      timeRange: 'L\'heure de fin doit être après l\'heure de début',
-      minSchedule: 'Au moins un créneau horaire est requis'
+      timeRange: "L'heure de fin doit être après l'heure de début",
+      minSchedule: 'Au moins un créneau horaire est requis',
     };
 
     // Return the first error message found

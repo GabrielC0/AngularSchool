@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, ReplaySubject, shareReplay, tap } from 'rxjs';
+import { Observable, shareReplay, tap } from 'rxjs';
 import { BaseApiService } from '../../../shared/services/base-api.service';
 
 export interface Professor {

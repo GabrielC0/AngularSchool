@@ -17,7 +17,10 @@ export class AppStateService {
       const snapshot = { userName: this.userName(), role: this.role() };
       try {
         localStorage.setItem('app_state', JSON.stringify(snapshot));
-      } catch {}
+      } catch (err) {
+        // Fallback if storage is unavailable
+        console.warn('Persist state failed', err);
+      }
     });
 
     // Hydrate
@@ -28,7 +31,9 @@ export class AppStateService {
         if (parsed?.userName !== undefined) this.userName.set(parsed.userName);
         if (parsed?.role) this.role.set(parsed.role);
       }
-    } catch {}
+    } catch (err) {
+      console.warn('Hydration failed', err);
+    }
   }
 
   signInAs(role: UserRole, name: string): void {

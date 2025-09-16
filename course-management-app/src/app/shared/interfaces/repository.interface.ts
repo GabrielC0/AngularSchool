@@ -7,7 +7,7 @@ export interface Repository<T, ID = string> {
 }
 
 export interface SearchRepository<T, ID = string> extends Repository<T, ID> {
-  search(criteria: any): Promise<T[]>;
+  search(criteria: Partial<T>): Promise<T[]>;
   findBy(criteria: Partial<T>): Promise<T[]>;
 }
 
@@ -20,5 +20,5 @@ export interface PaginatedResult<T> {
 }
 
 export interface PaginatedRepository<T, ID = string> extends Repository<T, ID> {
-  findPaginated(page: number, limit: number, filters?: any): Promise<PaginatedResult<T>>;
+  findPaginated(page: number, limit: number, filters?: Partial<T>): Promise<PaginatedResult<T>>;
 }

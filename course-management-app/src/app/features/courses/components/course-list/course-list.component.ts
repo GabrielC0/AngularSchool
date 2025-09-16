@@ -48,7 +48,13 @@ import { Course } from '../../../../shared/models/course.model';
             </div>
           </div>
           <div class="course-actions">
-            <button class="btn btn-secondary" (click)="openDelete(course.id, course.title)">
+            <button
+              class="btn btn-secondary"
+              (click)="openDelete(course.id, course.title)"
+              tabindex="0"
+              (keyup.enter)="openDelete(course.id, course.title)"
+              aria-label="Supprimer le cours {{ course.title }}"
+            >
               Supprimer
             </button>
           </div>
@@ -57,7 +63,13 @@ import { Course } from '../../../../shared/models/course.model';
 
       <!-- Confirmation Modal -->
       <div *ngIf="isDeleteOpen" class="fixed inset-0 z-50 flex items-center justify-center">
-        <div class="absolute inset-0 bg-black/30" (click)="cancelDelete()"></div>
+        <div
+          class="absolute inset-0 bg-black/30"
+          (click)="cancelDelete()"
+          tabindex="0"
+          (keyup.enter)="cancelDelete()"
+          aria-label="Fermer la fenêtre de confirmation"
+        ></div>
         <div
           class="relative bg-white rounded-xl shadow-xl border border-gray-200 w-full max-w-md mx-4 p-6"
         >

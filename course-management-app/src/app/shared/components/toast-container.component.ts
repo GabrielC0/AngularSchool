@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ToastService, ToastMessage } from '../services/toast.service';
+import { ToastService } from '../services/toast.service';
 
 @Component({
   selector: 'app-toast-container',
@@ -15,6 +15,8 @@ import { ToastService, ToastMessage } from '../services/toast.service';
         [class.error]="toast.type === 'error'"
         [class.info]="toast.type === 'info'"
         (click)="dismiss(toast.id)"
+        tabindex="0"
+        (keyup.enter)="dismiss(toast.id)"
         role="status"
         aria-live="polite"
       >
