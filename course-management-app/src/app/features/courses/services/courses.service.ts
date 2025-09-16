@@ -37,4 +37,17 @@ export class CoursesService extends BaseApiService {
       })
     );
   }
+
+  checkConflict(payload: {
+    dayOfWeek: string;
+    startTime: string;
+    endTime: string;
+    room: string;
+    teacherId: string;
+  }): Observable<{ conflict: boolean; reasons?: Array<'room' | 'teacher'> }> {
+    return this.post<{ conflict: boolean; reasons?: Array<'room' | 'teacher'> }>(
+      `/courses/check-conflict`,
+      payload
+    );
+  }
 }

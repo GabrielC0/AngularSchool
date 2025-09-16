@@ -37,7 +37,7 @@ import { Course } from '../../../../shared/models/course.model';
           <h3>{{ formatDisplay(course.title) || 'Cours' }}</h3>
           <p *ngIf="formatDisplay(course.description) as desc">{{ desc }}</p>
           <div class="course-meta">
-            <span>👨‍🏫 {{ displayTeacher(course) }}</span>
+            <span>👨‍🏫 {{ course.teacherName || displayTeacher(course) }}</span>
             <div class="schedule-block">
               <span class="schedule-title">📅 Créneaux</span>
               <ul class="schedule-list">

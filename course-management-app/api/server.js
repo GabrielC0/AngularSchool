@@ -49,6 +49,8 @@ app.post('/api/professors', (req, res) => {
     if (!name || typeof name !== 'string' || name.trim().length < 2) {
         return res.status(400).json({ message: 'Invalid name' });
     }
+    const exists = db.professors.some(p => p.name.toLowerCase() === name.trim().toLowerCase());
+    if (exists) return res.status(409).json({ message: 'Professor already exists' });
     const prof = { id: generateId(), name: name.trim(), createdAt: new Date() };
     db.professors.unshift(prof);
     res.status(201).json(prof);
@@ -82,12 +84,29 @@ app.post('/api/courses', (req, res) => {
         console.warn('[api] invalid payload for POST /api/courses', req.body);
         return res.status(400).json({ message: 'Invalid payload' });
     }
+    // Prevent overlapping schedules (simple check per (dayOfWeek, time range, room))
+    for (const s of schedule) {
+        const roomConflict = db.courses.some(c => c.schedule?.some(cs =>
+            cs.dayOfWeek === s.dayOfWeek && cs.room === s.room && !(s.endTime <= cs.startTime || s.startTime >= cs.endTime)
+        ));
+        if (roomConflict) {
+            return res.status(409).json({ message: 'Schedule conflict: room' });
+        }
+        const teacherConflict = db.courses.some(c => c.teacherId === teacherId && c.schedule?.some(cs =>
+            cs.dayOfWeek === s.dayOfWeek && !(s.endTime <= cs.startTime || s.startTime >= cs.endTime)
+        ));
+        if (teacherConflict) {
+            return res.status(409).json({ message: 'Schedule conflict: teacher' });
+        }
+    }
     const now = new Date();
+    const teacher = db.professors.find(p => p.id === teacherId);
     const newCourse = {
         id: generateId(),
         title,
         description: description || '',
         teacherId,
+        teacherName: teacher ? teacher.name : undefined,
         students: [],
         startDate: null,
         endDate: null,
@@ -106,6 +125,24 @@ app.get('/api/courses/:id', (req, res) => {
     const course = db.courses.find((c) => c.id === req.params.id);
     if (!course) return res.status(404).json({ message: 'Not found' });
     res.json(course);
+});
+// Check conflict endpoint
+app.post('/api/courses/check-conflict', (req, res) => {
+    const { dayOfWeek, startTime, endTime, room, teacherId } = req.body || {};
+    if (!dayOfWeek || !startTime || !endTime || !room || !teacherId) {
+        return res.status(400).json({ conflict: false, reasons: [], message: 'Invalid payload' });
+    }
+    const roomConflict = db.courses.some(c => c.schedule?.some(cs =>
+        cs.dayOfWeek === dayOfWeek && cs.room === room && !(endTime <= cs.startTime || startTime >= cs.endTime)
+    ));
+    const teacherConflict = db.courses.some(c => c.teacherId === teacherId && c.schedule?.some(cs =>
+        cs.dayOfWeek === dayOfWeek && !(endTime <= cs.startTime || startTime >= cs.endTime)
+    ));
+    const reasons = [];
+    if (roomConflict) reasons.push('room');
+    if (teacherConflict) reasons.push('teacher');
+    if (reasons.length > 0) return res.json({ conflict: true, reasons });
+    res.json({ conflict: false, reasons: [] });
 });
 
 app.put('/api/courses/:id', (req, res) => {

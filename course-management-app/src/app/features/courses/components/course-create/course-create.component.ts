@@ -197,16 +197,47 @@ export class CourseCreateComponent implements OnInit, OnDestroy {
     this.courseForm.updateValueAndValidity({ onlySelf: false });
 
     this.scheduleValidated = group.valid;
-    if (this.scheduleValidated) {
-      group.disable({ emitEvent: false });
-      this.toast.success('Créneau validé');
-    } else {
+    if (!this.scheduleValidated) {
       if (group.errors?.['timeRange']) {
         this.toast.error("L'heure de fin doit être après l'heure de début");
       } else {
         this.toast.info('Veuillez corriger le créneau puis revalider');
       }
+      return;
     }
+
+    const teacherId = this.courseForm.get('teacherId')?.value;
+    const dayOfWeek = group.get('dayOfWeek')?.value;
+    const startTime = group.get('startTime')?.value;
+    const endTime = group.get('endTime')?.value;
+    const room = group.get('room')?.value;
+    if (!teacherId || !dayOfWeek || !startTime || !endTime || !room) {
+      this.toast.info('Complétez le créneau avant validation');
+      return;
+    }
+    this.isLoading = true;
+    this.coursesService
+      .checkConflict({ teacherId, dayOfWeek, startTime, endTime, room })
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res) => {
+          this.isLoading = false;
+          if (res.conflict) {
+            this.scheduleValidated = false;
+            const reasons = res.reasons || [];
+            if (reasons.includes('room')) this.toast.error('Salle déjà occupée à cet horaire');
+            if (reasons.includes('teacher')) this.toast.error('Prof déjà occupé à cet horaire');
+          } else {
+            group.disable({ emitEvent: false });
+            this.scheduleValidated = true;
+            this.toast.success('Créneau validé');
+          }
+        },
+        error: () => {
+          this.isLoading = false;
+          this.toast.error('Vérification indisponible');
+        },
+      });
   }
 
   /**
@@ -286,8 +317,13 @@ export class CourseCreateComponent implements OnInit, OnDestroy {
         },
         error: (err) => {
           this.isLoading = false;
-          this.errorMessage = "Erreur lors de l'enregistrement du cours. Veuillez réessayer.";
-          this.toast.error("Échec de l'enregistrement du cours");
+          if (err?.status === 409) {
+            this.errorMessage = 'Conflit de planning: créneau déjà pris.';
+            this.toast.error('Créneau déjà occupé');
+          } else {
+            this.errorMessage = "Erreur lors de l'enregistrement du cours. Veuillez réessayer.";
+            this.toast.error("Échec de l'enregistrement du cours");
+          }
           console.error('Create course error', err);
         },
       });

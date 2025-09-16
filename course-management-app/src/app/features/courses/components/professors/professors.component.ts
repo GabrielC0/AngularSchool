@@ -92,8 +92,9 @@ export class ProfessorsComponent implements OnInit {
         this.form.reset();
         this.refresh();
       },
-      error: () => {
-        this.toast.error("Échec de l'ajout");
+      error: (err) => {
+        if (err?.status === 409) this.toast.error('Ce professeur existe déjà');
+        else this.toast.error("Échec de l'ajout");
         this.isLoading = false;
       },
     });
