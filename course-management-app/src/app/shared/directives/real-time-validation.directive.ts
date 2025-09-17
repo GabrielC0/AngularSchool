@@ -184,32 +184,32 @@ export class RealTimeValidationDirective implements OnInit, OnDestroy {
   private getErrorMessage(errors: Record<string, unknown>): string {
     if (!errors) return '';
 
-    // Use custom error message if provided
+    // Message personnalisé prioritaire
     if (this.errorMessage) {
       return this.errorMessage;
     }
 
-    // Generate default error messages
-    const errorMessages: { [key: string]: string } = {
-      required: 'Ce champ est requis',
-      email: 'Veuillez entrer une adresse email valide',
-      minlength: `Minimum ${errors.minlength.requiredLength} caractères requis`,
-      maxlength: `Maximum ${errors.maxlength.requiredLength} caractères autorisés`,
-      min: `La valeur doit être au moins ${errors.min.min}`,
-      max: `La valeur ne peut pas dépasser ${errors.max.max}`,
-      pattern: "Le format n'est pas valide",
-      futureDate: 'La date doit être dans le futur',
-      dateRange: 'La date de fin doit être après la date de début',
-      timeRange: "L'heure de fin doit être après l'heure de début",
-      minSchedule: 'Au moins un créneau horaire est requis',
-    };
+    // Accès sécurisé par clé (index signature)
+    if (errors['required']) return 'Ce champ est requis';
+    if (errors['email']) return 'Veuillez entrer une adresse email valide';
 
-    // Return the first error message found
-    for (const errorKey of Object.keys(errors)) {
-      if (errorMessages[errorKey]) {
-        return errorMessages[errorKey];
-      }
-    }
+    const minlength = errors['minlength'] as { requiredLength: number } | undefined;
+    if (minlength) return `Minimum ${minlength.requiredLength} caractères requis`;
+
+    const maxlength = errors['maxlength'] as { requiredLength: number } | undefined;
+    if (maxlength) return `Maximum ${maxlength.requiredLength} caractères autorisés`;
+
+    const min = errors['min'] as { min: number } | undefined;
+    if (min) return `La valeur doit être au moins ${min.min}`;
+
+    const max = errors['max'] as { max: number } | undefined;
+    if (max) return `La valeur ne peut pas dépasser ${max.max}`;
+
+    if (errors['pattern']) return "Le format n'est pas valide";
+    if (errors['futureDate']) return 'La date doit être dans le futur';
+    if (errors['dateRange']) return 'La date de fin doit être après la date de début';
+    if (errors['timeRange']) return "L'heure de fin doit être après l'heure de début";
+    if (errors['minSchedule']) return 'Au moins un créneau horaire est requis';
 
     return 'Valeur invalide';
   }
