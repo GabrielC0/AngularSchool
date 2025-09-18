@@ -1,5 +1,5 @@
 <div class="min-h-screen flex flex-col bg-gradient-to-b from-indigo-50/60 to-white text-black">
-  <header class="border-b border-gray-200 bg-white/80 backdrop-blur" *ngIf="!isStudentRoute()">
+  <header class="border-b border-gray-200 bg-white/80 backdrop-blur" *ngIf="isAuthenticated() && !isStudentRoute()">
     <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
       <div>
         <h1 class="text-xl font-semibold">📚 Système de Gestion de Cours</h1>

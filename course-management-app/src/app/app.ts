@@ -13,6 +13,7 @@ import { ToastContainerComponent } from './shared/components/toast-container.com
 import { inject } from '@angular/core';
 import { ProfessorsService } from './features/courses/services/professors.service';
 import { CoursesService } from './features/courses/services/courses.service';
+import { AppStateService } from './shared/services/app-state.service';
 
 @Component({
   selector: 'app-root',
@@ -24,6 +25,7 @@ export class App {
   protected readonly title = signal('course-management-app');
   protected readonly isNavigating = signal(false);
   protected readonly isStudentRoute = signal(false);
+  private readonly appState = inject(AppStateService);
 
   constructor(router: Router) {
     // Prefetch datasets at app start
@@ -53,5 +55,9 @@ export class App {
         }
       }
     });
+  }
+
+  protected isAuthenticated(): boolean {
+    return this.appState.isAuthenticated();
   }
 }
