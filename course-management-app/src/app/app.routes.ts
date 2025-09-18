@@ -6,6 +6,12 @@ export const routes: Routes = [
     loadComponent: () => import('./components/home/home.component').then((m) => m.HomeComponent),
   },
   {
+    path: 'student',
+    canActivate: [],
+    loadComponent: () =>
+      import('./features/student/student-planning.component').then((m) => m.StudentPlanningComponent),
+  },
+  {
     path: 'courses',
     canActivate: [],
     loadChildren: () => import('./features/courses/courses.routes').then((m) => m.coursesRoutes),

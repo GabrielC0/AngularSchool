@@ -23,6 +23,7 @@ import { CoursesService } from './features/courses/services/courses.service';
 export class App {
   protected readonly title = signal('course-management-app');
   protected readonly isNavigating = signal(false);
+  protected readonly isStudentRoute = signal(false);
 
   constructor(router: Router) {
     // Prefetch datasets at app start
@@ -31,11 +32,15 @@ export class App {
     profs.list().subscribe();
     courses.listCourses({ page: 1, limit: 20 }).subscribe();
 
+    // Init current route state
+    this.isStudentRoute.set(router.url?.startsWith('/student'));
+
     router.events.subscribe((ev) => {
       if (ev instanceof NavigationStart) {
         if (ev.url.startsWith('/courses') || ev.url.startsWith('/professors')) {
           this.isNavigating.set(true);
         }
+        this.isStudentRoute.set(ev.url.startsWith('/student'));
       }
       if (
         ev instanceof NavigationEnd ||
@@ -43,6 +48,9 @@ export class App {
         ev instanceof NavigationError
       ) {
         this.isNavigating.set(false);
+        if (ev instanceof NavigationEnd) {
+          this.isStudentRoute.set(ev.urlAfterRedirects.startsWith('/student'));
+        }
       }
     });
   }
