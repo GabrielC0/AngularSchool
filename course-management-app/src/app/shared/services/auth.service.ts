@@ -5,7 +5,7 @@ import { AppStateService, UserRole } from './app-state.service';
 interface StoredUser {
   username: string;
   password: string;
-  role: UserRole; // 'user' only for registered users (admin is hardcoded)
+  role: UserRole; // 'student' only for registered users (admin is hardcoded)
 }
 
 const ADMIN_CREDENTIALS = {
@@ -35,7 +35,11 @@ export class AuthService {
     return false;
   }
 
-  register(username: string, password: string): { success: boolean; message?: string } {
+  register(
+    username: string,
+    password: string,
+    role: UserRole = 'student'
+  ): { success: boolean; message?: string } {
     if (!username || !password) return { success: false, message: 'Identifiants requis' };
     if (username === ADMIN_CREDENTIALS.username)
       return { success: false, message: "Nom d'utilisateur réservé" };
@@ -44,7 +48,7 @@ export class AuthService {
     if (users.some((u) => u.username.toLowerCase() === username.toLowerCase())) {
       return { success: false, message: 'Utilisateur déjà existant' };
     }
-    users.push({ username, password, role: 'user' });
+    users.push({ username, password, role });
     this.setUsers(users);
     return { success: true };
   }
@@ -52,6 +56,10 @@ export class AuthService {
   logout(): void {
     this.state.signOut();
     this.router.navigate(['/auth']);
+  }
+
+  getCurrentRole(): UserRole {
+    return this.state.role();
   }
 
   // Storage helpers
@@ -76,5 +84,3 @@ export class AuthService {
     return this.getUsers().find((u) => u.username.toLowerCase() === username.toLowerCase());
   }
 }
-
-

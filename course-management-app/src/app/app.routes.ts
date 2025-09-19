@@ -1,18 +1,22 @@
 import { Routes } from '@angular/router';
 import { adminGuard } from './shared/guards/admin.guard';
 import { authGuard } from './shared/guards/auth.guard';
+import { StudentGuard } from './shared/guards/student.guard';
+import { AdminOnlyGuard } from './shared/guards/admin-only.guard';
 
 export const routes: Routes = [
   {
     path: '',
-    canActivate: [adminGuard],
+    canActivate: [AdminOnlyGuard],
     loadComponent: () => import('./components/home/home.component').then((m) => m.HomeComponent),
   },
   {
     path: 'student',
-    canActivate: [authGuard],
+    canActivate: [StudentGuard],
     loadComponent: () =>
-      import('./features/student/student-planning.component').then((m) => m.StudentPlanningComponent),
+      import('./features/student/student-planning.component').then(
+        (m) => m.StudentPlanningComponent
+      ),
   },
   {
     path: 'auth',
@@ -20,12 +24,12 @@ export const routes: Routes = [
   },
   {
     path: 'courses',
-    canActivate: [authGuard],
+    canActivate: [AdminOnlyGuard],
     loadChildren: () => import('./features/courses/courses.routes').then((m) => m.coursesRoutes),
   },
   {
     path: 'professors',
-    canActivate: [authGuard],
+    canActivate: [AdminOnlyGuard],
     loadComponent: () =>
       import('./features/courses/components/professors/professors.component').then(
         (m) => m.ProfessorsComponent
@@ -33,7 +37,7 @@ export const routes: Routes = [
   },
   {
     path: 'reports',
-    canActivate: [authGuard],
+    canActivate: [AdminOnlyGuard],
     loadComponent: () =>
       import('./features/reports/reports.component').then((m) => m.ReportsComponent),
   },

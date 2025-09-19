@@ -133,15 +133,15 @@ import { Course } from '../../../../shared/models/course.model';
       .course-card {
         background: #fff;
         padding: 0.9rem 1rem;
-        border-radius: 10px;
-        border: 1px solid #eaecef;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+        border-radius: 12px;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
       }
       .course-card:hover {
         transform: translateY(-2px);
-        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-        border-color: #e1e4e8;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        border-color: #cbd5e1;
       }
 
       .course-meta {

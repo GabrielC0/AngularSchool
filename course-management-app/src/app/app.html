@@ -1,14 +1,24 @@
-<div class="min-h-screen flex flex-col bg-gradient-to-b from-indigo-50/60 to-white text-black">
-  <header class="border-b border-gray-200 bg-white/80 backdrop-blur" *ngIf="isAuthenticated() && !isStudentRoute()">
+<div
+  class="min-h-screen flex flex-col bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 text-slate-800"
+>
+  <header
+    class="border-b border-slate-200 bg-white/80 backdrop-blur-md shadow-sm"
+    *ngIf="isAuthenticated() && !isStudentRoute()"
+  >
     <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
       <div>
-        <h1 class="text-xl font-semibold">📚 Système de Gestion de Cours</h1>
-        <p class="text-sm text-gray-600">Gérez vos cours, étudiants et professeurs facilement</p>
+        <h1 class="text-xl font-semibold text-slate-800">📚 Système de Gestion de Cours</h1>
+        <p class="text-sm text-slate-600">
+          Gérez vos cours, étudiants et professeurs facilement
+          <span *ngIf="isAuthenticated()" class="ml-2 text-blue-600 font-medium">
+            • Connecté en tant qu'{{ appState.role() }}
+          </span>
+        </p>
       </div>
       <nav class="flex items-center gap-3">
         <a
           routerLink="/"
-          class="px-3 py-2 rounded-lg border border-gray-300 text-gray-800 hover:bg-gray-50"
+          class="px-3 py-2 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-50 hover:border-slate-400 transition-all duration-300 hover:transform hover:-translate-y-0.5 hover:shadow-md"
           >Accueil</a
         >
         <ng-container *ngIf="isNavigating(); else roleAware"></ng-container>
@@ -16,22 +26,32 @@
           <a
             *ngIf="true"
             routerLink="/courses"
-            class="px-3 py-2 rounded-lg border border-gray-300 text-gray-800 hover:bg-gray-50"
+            class="px-3 py-2 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-50 hover:border-slate-400 transition-all duration-300 hover:transform hover:-translate-y-0.5 hover:shadow-md"
             >Cours</a
           >
           <a
             *ngIf="true"
             routerLink="/professors"
-            class="px-3 py-2 rounded-lg border border-gray-300 text-gray-800 hover:bg-gray-50"
+            class="px-3 py-2 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-50 hover:border-slate-400 transition-all duration-300 hover:transform hover:-translate-y-0.5 hover:shadow-md"
             >Profs</a
           >
           <a
             *ngIf="true"
             routerLink="/reports"
-            class="px-3 py-2 rounded-lg border border-gray-300 text-gray-800 hover:bg-gray-50"
+            class="px-3 py-2 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-50 hover:border-slate-400 transition-all duration-300 hover:transform hover:-translate-y-0.5 hover:shadow-md"
             >Rapports</a
           >
         </ng-template>
+
+        <!-- Bouton de déconnexion -->
+        <button
+          (click)="logout()"
+          class="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 transition-all duration-300 hover:transform hover:-translate-y-0.5 hover:shadow-lg flex items-center gap-2 font-medium"
+          title="Se déconnecter"
+        >
+          <span class="text-sm">🚪</span>
+          <span>Déconnexion</span>
+        </button>
       </nav>
     </div>
   </header>
@@ -40,7 +60,7 @@
     <div class="max-w-6xl mx-auto px-6 py-6">
       <div
         *ngIf="isNavigating()"
-        class="fixed inset-0 bg-black/10 backdrop-blur-sm flex items-center justify-center z-40"
+        class="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center z-40"
       >
         <div
           class="animate-spin h-8 w-8 border-4 border-blue-600 border-t-transparent rounded-full"
@@ -51,8 +71,8 @@
     </div>
   </main>
 
-  <footer class="border-t border-gray-200 bg-white/80">
-    <div class="max-w-6xl mx-auto px-6 py-4 text-sm text-gray-600">
+  <footer class="border-t border-slate-200 bg-white/80 backdrop-blur-md shadow-sm">
+    <div class="max-w-6xl mx-auto px-6 py-4 text-sm text-slate-600">
       <p>&copy; 2025 Système de Gestion de Cours - Développé avec Angular</p>
     </div>
   </footer>

@@ -27,7 +27,7 @@ import { APP_CONSTANTS } from '../../../../shared/constants/app.constants';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './course-create.component.html',
-  styleUrls: ['./course-create.component.scss'],
+  styles: [],
 })
 export class CourseCreateComponent implements OnInit, OnDestroy {
   courseForm!: FormGroup;

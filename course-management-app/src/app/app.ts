@@ -19,13 +19,13 @@ import { AppStateService } from './shared/services/app-state.service';
   selector: 'app-root',
   imports: [CommonModule, RouterOutlet, RouterModule, ToastContainerComponent],
   templateUrl: './app.html',
-  styleUrl: './app.scss',
+  styles: [],
 })
 export class App {
   protected readonly title = signal('course-management-app');
   protected readonly isNavigating = signal(false);
   protected readonly isStudentRoute = signal(false);
-  private readonly appState = inject(AppStateService);
+  protected readonly appState = inject(AppStateService);
 
   constructor(router: Router) {
     // Prefetch datasets at app start
@@ -59,5 +59,13 @@ export class App {
 
   protected isAuthenticated(): boolean {
     return this.appState.isAuthenticated();
+  }
+
+  protected logout(): void {
+    if (confirm('Êtes-vous sûr de vouloir vous déconnecter ?')) {
+      this.appState.signOut();
+      // Redirection vers la page d'authentification
+      window.location.href = '/auth';
+    }
   }
 }

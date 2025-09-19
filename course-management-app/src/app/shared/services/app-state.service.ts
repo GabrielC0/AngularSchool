@@ -1,6 +1,6 @@
 import { Injectable, effect, signal, computed } from '@angular/core';
 
-export type UserRole = 'guest' | 'user' | 'admin';
+export type UserRole = 'guest' | 'admin' | 'student';
 
 @Injectable({ providedIn: 'root' })
 export class AppStateService {
@@ -10,6 +10,7 @@ export class AppStateService {
 
   readonly isAuthenticated = computed(() => this.role() !== 'guest');
   readonly isAdmin = computed(() => this.role() === 'admin');
+  readonly isStudent = computed(() => this.role() === 'student');
 
   constructor() {
     effect(() => {

@@ -59,7 +59,7 @@ import { Course, AttendanceStatus } from '../../../../shared/models/course.model
               <div>
                 <p class="text-sm text-green-600">Présents</p>
                 <p class="text-xl font-semibold text-green-800">
-                  {{ getAttendanceCount('present') }}
+                  {{ getAttendanceCount(AttendanceStatus.PRESENT) }}
                 </p>
               </div>
             </div>
@@ -69,7 +69,9 @@ import { Course, AttendanceStatus } from '../../../../shared/models/course.model
               <div class="text-2xl mr-3">❌</div>
               <div>
                 <p class="text-sm text-red-600">Absents</p>
-                <p class="text-xl font-semibold text-red-800">{{ getAttendanceCount('absent') }}</p>
+                <p class="text-xl font-semibold text-red-800">
+                  {{ getAttendanceCount(AttendanceStatus.ABSENT) }}
+                </p>
               </div>
             </div>
           </div>
@@ -79,7 +81,7 @@ import { Course, AttendanceStatus } from '../../../../shared/models/course.model
               <div>
                 <p class="text-sm text-yellow-600">En retard</p>
                 <p class="text-xl font-semibold text-yellow-800">
-                  {{ getAttendanceCount('late') }}
+                  {{ getAttendanceCount(AttendanceStatus.LATE) }}
                 </p>
               </div>
             </div>
@@ -90,7 +92,7 @@ import { Course, AttendanceStatus } from '../../../../shared/models/course.model
               <div>
                 <p class="text-sm text-blue-600">Excusés</p>
                 <p class="text-xl font-semibold text-blue-800">
-                  {{ getAttendanceCount('excused') }}
+                  {{ getAttendanceCount(AttendanceStatus.EXCUSED) }}
                 </p>
               </div>
             </div>
@@ -130,17 +132,17 @@ import { Course, AttendanceStatus } from '../../../../shared/models/course.model
                     <span
                       class="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800"
                     >
-                      {{ getStudentAttendanceCount(student, 'present') }} ✅
+                      {{ getStudentAttendanceCount(student, AttendanceStatus.PRESENT) }} ✅
                     </span>
                     <span
                       class="px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800"
                     >
-                      {{ getStudentAttendanceCount(student, 'absent') }} ❌
+                      {{ getStudentAttendanceCount(student, AttendanceStatus.ABSENT) }} ❌
                     </span>
                     <span
                       class="px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800"
                     >
-                      {{ getStudentAttendanceCount(student, 'late') }} ⏰
+                      {{ getStudentAttendanceCount(student, AttendanceStatus.LATE) }} ⏰
                     </span>
                   </div>
                 </div>
@@ -231,6 +233,9 @@ import { Course, AttendanceStatus } from '../../../../shared/models/course.model
   ],
 })
 export class CourseAttendanceComponent implements OnInit, OnDestroy {
+  // Exposer l'enum pour le template
+  readonly AttendanceStatus = AttendanceStatus;
+
   course: Course | null = null;
   isLoading = false;
   errorMessage: string | null = null;
