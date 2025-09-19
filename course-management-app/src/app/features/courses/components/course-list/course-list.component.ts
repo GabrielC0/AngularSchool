@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { CoursesService } from '../../services/courses.service';
@@ -225,6 +225,11 @@ import { Course } from '../../../../shared/models/course.model';
   ],
 })
 export class CourseListComponent implements OnInit {
+  @Output() courseSelected = new EventEmitter<Course>();
+  @Output() courseDeleted = new EventEmitter<string>();
+  @Output() courseCreated = new EventEmitter<void>();
+  @Output() refreshRequested = new EventEmitter<void>();
+
   courses: Course[] = [];
   isLoading = false;
   errorMessage: string | null = null;
@@ -255,6 +260,8 @@ export class CourseListComponent implements OnInit {
         this.courses = res.courses || [];
         this.isLoading = false;
         this.cdr.detectChanges();
+        // Émettre l'événement de rafraîchissement
+        this.refreshRequested.emit();
       },
       error: (err) => {
         this.errorMessage = 'Impossible de charger les cours.';
@@ -263,6 +270,16 @@ export class CourseListComponent implements OnInit {
         this.cdr.detectChanges();
       },
     });
+  }
+
+  // Méthode publique pour sélectionner un cours
+  selectCourse(course: Course): void {
+    this.courseSelected.emit(course);
+  }
+
+  // Méthode publique pour rafraîchir la liste
+  refresh(): void {
+    this.fetchCourses();
   }
 
   openDelete(id: string, title?: string): void {
@@ -288,6 +305,8 @@ export class CourseListComponent implements OnInit {
         this.cancelDelete();
         this.cdr.detectChanges();
         this.toast.success('Cours supprimé');
+        // Émettre l'événement de suppression
+        this.courseDeleted.emit(id);
       },
       error: (err) => {
         this.errorMessage = 'La suppression a échoué.';

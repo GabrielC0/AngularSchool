@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ToastService } from '../services/toast.service';
 
@@ -14,9 +14,9 @@ import { ToastService } from '../services/toast.service';
         [class.success]="toast.type === 'success'"
         [class.error]="toast.type === 'error'"
         [class.info]="toast.type === 'info'"
-        (click)="dismiss(toast.id)"
+        (click)="onToastClick(toast.id); dismiss(toast.id)"
         tabindex="0"
-        (keyup.enter)="dismiss(toast.id)"
+        (keyup.enter)="onToastClick(toast.id); dismiss(toast.id)"
         role="status"
         aria-live="polite"
       >
@@ -65,10 +65,24 @@ import { ToastService } from '../services/toast.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ToastContainerComponent {
+  @Output() toastDismissed = new EventEmitter<number>();
+  @Output() toastClicked = new EventEmitter<number>();
+  @Output() allToastsCleared = new EventEmitter<void>();
+
   private readonly toastService = inject(ToastService);
   readonly toasts$ = this.toastService.toasts$;
 
   dismiss(id: number): void {
     this.toastService.dismiss(id);
+    this.toastDismissed.emit(id);
+  }
+
+  onToastClick(id: number): void {
+    this.toastClicked.emit(id);
+  }
+
+  clearAll(): void {
+    // Méthode pour vider tous les toasts (si nécessaire)
+    this.allToastsCleared.emit();
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
@@ -190,6 +190,11 @@ import { Course } from '../../../../shared/models/course.model';
   ],
 })
 export class CourseDetailComponent implements OnInit, OnDestroy {
+  @Output() courseEdited = new EventEmitter<Course>();
+  @Output() studentEnrolled = new EventEmitter<{ courseId: string; studentId: string }>();
+  @Output() attendanceViewed = new EventEmitter<string>();
+  @Output() courseDeleted = new EventEmitter<string>();
+
   course: Course | null = null;
   isLoading = false;
   errorMessage: string | null = null;
@@ -340,6 +345,7 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
 
   editCourse(): void {
     if (this.course) {
+      this.courseEdited.emit(this.course);
       this.router.navigate(['/courses/edit', this.course.id]);
     }
   }
@@ -352,7 +358,22 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
 
   viewAttendance(): void {
     if (this.course) {
+      this.attendanceViewed.emit(this.course.id);
       this.router.navigate(['/courses/attendance', this.course.id]);
+    }
+  }
+
+  // Méthode pour émettre l'événement d'inscription d'étudiant
+  onStudentEnrolled(studentId: string): void {
+    if (this.course) {
+      this.studentEnrolled.emit({ courseId: this.course.id, studentId });
+    }
+  }
+
+  // Méthode pour émettre l'événement de suppression de cours
+  onCourseDeleted(): void {
+    if (this.course) {
+      this.courseDeleted.emit(this.course.id);
     }
   }
 
