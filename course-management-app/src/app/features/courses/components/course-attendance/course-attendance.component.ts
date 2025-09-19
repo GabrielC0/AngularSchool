@@ -4,7 +4,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { CoursesService } from '../../services/courses.service';
 import { ToastService } from '../../../../shared/services/toast.service';
-import { Course, AttendanceStatus } from '../../../../shared/models/course.model';
+import {
+  Course,
+  AttendanceStatus,
+  Student,
+  Attendance,
+  CourseStatus,
+} from '../../../../shared/models/course.model';
 
 @Component({
   selector: 'app-course-attendance',
@@ -385,7 +391,7 @@ export class CourseAttendanceComponent implements OnInit, OnDestroy {
         startDate: new Date('2024-01-15'),
         endDate: new Date('2024-06-15'),
         schedule: [],
-        status: 'active' as any,
+        status: 'active' as CourseStatus,
         maxStudents: 30,
         currentStudents: 3,
         createdAt: new Date('2024-01-10'),
@@ -418,14 +424,16 @@ export class CourseAttendanceComponent implements OnInit, OnDestroy {
     }, 0);
   }
 
-  getStudentAttendanceCount(student: any, status: AttendanceStatus): number {
-    return student.attendance?.filter((a: any) => a.status === status).length || 0;
+  getStudentAttendanceCount(student: Student, status: AttendanceStatus): number {
+    return student.attendance?.filter((a: Attendance) => a.status === status).length || 0;
   }
 
-  getRecentAttendance(student: any, limit: number): any[] {
+  getRecentAttendance(student: Student, limit: number): Attendance[] {
     if (!student.attendance) return [];
     return student.attendance
-      .sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime())
+      .sort(
+        (a: Attendance, b: Attendance) => new Date(b.date).getTime() - new Date(a.date).getTime()
+      )
       .slice(0, limit);
   }
 
