@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { AdminMenuComponent } from '../../features/admin/admin-menu.component';
 
 /**
  * Home Component - Landing page for the course management system
@@ -8,7 +9,7 @@ import { RouterModule } from '@angular/router';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, AdminMenuComponent],
   template: `
     <section class="text-center mb-8">
       <h2 class="text-3xl font-semibold text-black mb-2">
@@ -58,6 +59,11 @@ import { RouterModule } from '@angular/router';
           >Ouvrir l'agenda</a
         >
       </div>
+    </section>
+
+    <!-- Admin Menu Section -->
+    <section class="mt-8">
+      <app-admin-menu />
     </section>
   `,
   styles: [],
