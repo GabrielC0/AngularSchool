@@ -1,6 +1,4 @@
 import { Routes } from '@angular/router';
-import { adminGuard } from './shared/guards/admin.guard';
-import { authGuard } from './shared/guards/auth.guard';
 import { StudentGuard } from './shared/guards/student.guard';
 import { AdminOnlyGuard } from './shared/guards/admin-only.guard';
 

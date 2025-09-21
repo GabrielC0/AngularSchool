@@ -19,7 +19,7 @@ import { ToastService } from '../services/toast.service';
 export class ErrorInterceptor implements HttpInterceptor {
   constructor(private globalState: GlobalStateService, private toast: ToastService) {}
 
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+  intercept(req: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     return next.handle(req).pipe(
       catchError((error: HttpErrorResponse) => {
         this.handleError(error, req);
@@ -28,7 +28,7 @@ export class ErrorInterceptor implements HttpInterceptor {
     );
   }
 
-  private handleError(error: HttpErrorResponse, req: HttpRequest<any>): void {
+  private handleError(error: HttpErrorResponse, req: HttpRequest<unknown>): void {
     let errorMessage = 'Une erreur est survenue';
     let errorType = 'error';
 

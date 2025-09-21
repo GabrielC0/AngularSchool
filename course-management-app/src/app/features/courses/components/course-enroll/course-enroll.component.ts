@@ -5,7 +5,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { Subject, takeUntil } from 'rxjs';
 import { CoursesService } from '../../services/courses.service';
 import { ToastService } from '../../../../shared/services/toast.service';
-import { Course } from '../../../../shared/models/course.model';
+import { Course, CourseStatus } from '../../../../shared/models/course.model';
 
 @Component({
   selector: 'app-course-enroll',
@@ -279,7 +279,7 @@ export class CourseEnrollComponent implements OnInit, OnDestroy {
         startDate: new Date('2024-01-15'),
         endDate: new Date('2024-06-15'),
         schedule: [],
-        status: 'active' as any,
+        status: 'active' as CourseStatus,
         maxStudents: 30,
         currentStudents: 2,
         createdAt: new Date('2024-01-10'),
@@ -299,7 +299,7 @@ export class CourseEnrollComponent implements OnInit, OnDestroy {
       this.isSubmitting = true;
 
       const formValue = this.enrollmentForm.value;
-      const enrollmentData = {
+      const _enrollmentData = {
         studentId: formValue.studentId,
         studentName: formValue.studentName,
         email: formValue.email,

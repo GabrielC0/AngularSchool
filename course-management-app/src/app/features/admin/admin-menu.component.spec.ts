@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
+import { provideHttpClient } from '@angular/common/http';
 import { AdminMenuComponent } from './admin-menu.component';
 import { GlobalStateService } from '../../shared/services/global-state.service';
 import { ToastService } from '../../shared/services/toast.service';
@@ -7,9 +8,9 @@ import { ToastService } from '../../shared/services/toast.service';
 describe('AdminMenuComponent', () => {
   let component: AdminMenuComponent;
   let fixture: ComponentFixture<AdminMenuComponent>;
-  let mockRouter: jasmine.SpyObj<Router>;
-  let mockGlobalState: jasmine.SpyObj<GlobalStateService>;
-  let mockToast: jasmine.SpyObj<ToastService>;
+  let _mockRouter: jasmine.SpyObj<Router>;
+  let _mockGlobalState: jasmine.SpyObj<GlobalStateService>;
+  let _mockToast: jasmine.SpyObj<ToastService>;
 
   beforeEach(async () => {
     const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
@@ -24,6 +25,7 @@ describe('AdminMenuComponent', () => {
     await TestBed.configureTestingModule({
       imports: [AdminMenuComponent],
       providers: [
+        provideHttpClient(),
         { provide: Router, useValue: routerSpy },
         { provide: GlobalStateService, useValue: globalStateSpy },
         { provide: ToastService, useValue: toastSpy },
@@ -32,9 +34,9 @@ describe('AdminMenuComponent', () => {
 
     fixture = TestBed.createComponent(AdminMenuComponent);
     component = fixture.componentInstance;
-    mockRouter = TestBed.inject(Router) as jasmine.SpyObj<Router>;
-    mockGlobalState = TestBed.inject(GlobalStateService) as jasmine.SpyObj<GlobalStateService>;
-    mockToast = TestBed.inject(ToastService) as jasmine.SpyObj<ToastService>;
+    _mockRouter = TestBed.inject(Router) as jasmine.SpyObj<Router>;
+    _mockGlobalState = TestBed.inject(GlobalStateService) as jasmine.SpyObj<GlobalStateService>;
+    _mockToast = TestBed.inject(ToastService) as jasmine.SpyObj<ToastService>;
   });
 
   it('should create', () => {
@@ -101,13 +103,13 @@ describe('AdminMenuComponent', () => {
 
     await component.testHttpInterceptor();
 
-    expect(mockGlobalState.setLoading).toHaveBeenCalledWith('http', true);
-    expect(mockGlobalState.incrementHttpRequests).toHaveBeenCalled();
+    expect(_mockGlobalState.setLoading).toHaveBeenCalledWith('http', true);
+    expect(_mockGlobalState.incrementHttpRequests).toHaveBeenCalled();
   });
 
   it('should test error handling', () => {
     component.testErrorHandling();
-    expect(mockGlobalState.addError).toHaveBeenCalled();
+    expect(_mockGlobalState.addError).toHaveBeenCalled();
   });
 
   it('should simulate API call', async () => {

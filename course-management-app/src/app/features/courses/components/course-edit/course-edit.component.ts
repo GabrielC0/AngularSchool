@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { CoursesService } from '../../services/courses.service';
 import { ToastService } from '../../../../shared/services/toast.service';
-import { Course } from '../../../../shared/models/course.model';
+import { Course, DayOfWeek, CourseStatus } from '../../../../shared/models/course.model';
 
 @Component({
   selector: 'app-course-edit',
@@ -37,23 +37,23 @@ import { Course } from '../../../../shared/models/course.model';
             <h3 class="text-lg font-semibold text-black mb-4">Informations du cours</h3>
             <div class="space-y-4">
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Titre</label>
+                <span class="block text-sm font-medium text-gray-700 mb-1">Titre</span>
                 <p class="text-gray-900 bg-gray-50 p-3 rounded-lg">{{ course.title }}</p>
               </div>
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                <span class="block text-sm font-medium text-gray-700 mb-1">Description</span>
                 <p class="text-gray-900 bg-gray-50 p-3 rounded-lg">
                   {{ course.description || 'Aucune description' }}
                 </p>
               </div>
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Professeur</label>
+                <span class="block text-sm font-medium text-gray-700 mb-1">Professeur</span>
                 <p class="text-gray-900 bg-gray-50 p-3 rounded-lg">
                   {{ course.teacherName || 'Non assigné' }}
                 </p>
               </div>
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Statut</label>
+                <span class="block text-sm font-medium text-gray-700 mb-1">Statut</span>
                 <span
                   class="inline-block px-3 py-1 rounded-full text-sm font-medium"
                   [class]="getStatusClass(course.status)"
@@ -195,20 +195,20 @@ export class CourseEditComponent implements OnInit, OnDestroy {
         schedule: [
           {
             id: '1',
-            dayOfWeek: 'monday' as any,
+            dayOfWeek: 'monday' as DayOfWeek,
             startTime: '09:00',
             endTime: '11:00',
             room: 'A101',
           },
           {
             id: '2',
-            dayOfWeek: 'wednesday' as any,
+            dayOfWeek: 'wednesday' as DayOfWeek,
             startTime: '14:00',
             endTime: '16:00',
             room: 'B205',
           },
         ],
-        status: 'active' as any,
+        status: 'active' as CourseStatus,
         maxStudents: 30,
         currentStudents: 15,
         createdAt: new Date(),

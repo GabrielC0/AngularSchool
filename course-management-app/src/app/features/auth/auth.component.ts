@@ -42,10 +42,11 @@ import { ToastService } from '../../shared/services/toast.service';
 
             <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-4">
               <div>
-                <label class="block text-sm font-semibold text-slate-700 mb-2"
+                <label for="username" class="block text-sm font-semibold text-slate-700 mb-2"
                   >Nom d'utilisateur</label
                 >
                 <input
+                  id="username"
                   formControlName="username"
                   type="text"
                   class="w-full border-2 border-slate-300 rounded-xl px-4 py-3 text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
@@ -53,8 +54,9 @@ import { ToastService } from '../../shared/services/toast.service';
                 />
               </div>
               <div>
-                <label class="block text-sm font-semibold text-slate-700 mb-2">Mot de passe</label>
+                <label for="password" class="block text-sm font-semibold text-slate-700 mb-2">Mot de passe</label>
                 <input
+                  id="password"
                   formControlName="password"
                   type="password"
                   class="w-full border-2 border-slate-300 rounded-xl px-4 py-3 text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
@@ -87,10 +89,11 @@ import { ToastService } from '../../shared/services/toast.service';
 
             <div class="space-y-4">
               <div>
-                <label class="block text-sm font-semibold text-slate-700 mb-2"
+                <label for="studentUsername" class="block text-sm font-semibold text-slate-700 mb-2"
                   >Nom d'utilisateur</label
                 >
                 <input
+                  id="studentUsername"
                   [(ngModel)]="studentUsername"
                   type="text"
                   class="w-full border-2 border-slate-300 rounded-xl px-4 py-3 text-slate-800 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-300"
@@ -98,8 +101,9 @@ import { ToastService } from '../../shared/services/toast.service';
                 />
               </div>
               <div>
-                <label class="block text-sm font-semibold text-slate-700 mb-2">Mot de passe</label>
+                <label for="studentPassword" class="block text-sm font-semibold text-slate-700 mb-2">Mot de passe</label>
                 <input
+                  id="studentPassword"
                   [(ngModel)]="studentPassword"
                   type="password"
                   class="w-full border-2 border-slate-300 rounded-xl px-4 py-3 text-slate-800 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-300"

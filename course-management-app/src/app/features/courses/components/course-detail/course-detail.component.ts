@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { CoursesService } from '../../services/courses.service';
 import { ToastService } from '../../../../shared/services/toast.service';
-import { Course } from '../../../../shared/models/course.model';
+import { Course, DayOfWeek, CourseStatus } from '../../../../shared/models/course.model';
 
 @Component({
   selector: 'app-course-detail',
@@ -269,27 +269,27 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
         schedule: [
           {
             id: '1',
-            dayOfWeek: 'monday' as any,
+            dayOfWeek: 'monday' as DayOfWeek,
             startTime: '09:00',
             endTime: '11:00',
             room: 'A101',
           },
           {
             id: '2',
-            dayOfWeek: 'wednesday' as any,
+            dayOfWeek: 'wednesday' as DayOfWeek,
             startTime: '14:00',
             endTime: '16:00',
             room: 'B205',
           },
           {
             id: '3',
-            dayOfWeek: 'friday' as any,
+            dayOfWeek: 'friday' as DayOfWeek,
             startTime: '10:00',
             endTime: '12:00',
             room: 'A101',
           },
         ],
-        status: 'active' as any,
+        status: 'active' as CourseStatus,
         maxStudents: 30,
         currentStudents: 3,
         createdAt: new Date('2024-01-10'),

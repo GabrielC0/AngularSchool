@@ -241,7 +241,7 @@ export class AdminMenuComponent {
       // Simulate HTTP request with delay
       await new Promise((resolve) => setTimeout(resolve, 2000));
       this.addConsoleOutput('✅ HTTP Interceptor test completed');
-    } catch (error) {
+    } catch {
       this.errorCount.update((value) => value + 1);
       this.addConsoleOutput('❌ HTTP Interceptor test failed');
     } finally {
@@ -295,9 +295,9 @@ export class AdminMenuComponent {
     const startTime = performance.now();
 
     // Simulate heavy computation
-    let result = 0;
+    let _result = 0;
     for (let i = 0; i < 1000000; i++) {
-      result += Math.random();
+      _result += Math.random();
     }
 
     const endTime = performance.now();

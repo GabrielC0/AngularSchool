@@ -33,8 +33,7 @@ describe('RealTimeValidationDirective', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [TestComponent],
-      imports: [ReactiveFormsModule, RealTimeValidationDirective],
+      imports: [TestComponent, ReactiveFormsModule, RealTimeValidationDirective],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestComponent);

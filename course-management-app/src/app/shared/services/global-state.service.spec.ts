@@ -1,11 +1,14 @@
 import { TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
 import { GlobalStateService } from './global-state.service';
 
 describe('GlobalStateService', () => {
   let service: GlobalStateService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      providers: [provideHttpClient()]
+    });
     service = TestBed.inject(GlobalStateService);
   });
 

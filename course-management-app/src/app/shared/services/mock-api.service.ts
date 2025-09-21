@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, delay, throwError } from 'rxjs';
+import { Observable, of, delay } from 'rxjs';
 import { GlobalStateService } from './global-state.service';
 
 /**
@@ -80,7 +80,7 @@ export class MockApiService {
   /**
    * Simulate search functionality
    */
-  simulateSearch<T>(data: T[], searchTerm: string, searchFields: (keyof T)[]): Observable<T[]> {
+  simulateSearch<T>(data: T[], searchTerm: string, searchFields: Array<keyof T>): Observable<T[]> {
     const filteredData = data.filter((item) => {
       return searchFields.some((field) => {
         const value = item[field];
@@ -130,13 +130,13 @@ export class MockApiService {
    */
   simulateBatchOperation<T>(
     items: T[],
-    operation: 'create' | 'update' | 'delete'
-  ): Observable<{ success: number; failed: number; results: any[] }> {
-    const results: any[] = [];
+    _operation: 'create' | 'update' | 'delete'
+  ): Observable<{ success: number; failed: number; results: unknown[] }> {
+    const results: unknown[] = [];
     let success = 0;
     let failed = 0;
 
-    items.forEach((item, index) => {
+    items.forEach((_item, index) => {
       // Simulate some failures
       if (Math.random() < 0.1) {
         // 10% failure rate
@@ -144,7 +144,7 @@ export class MockApiService {
         results.push({ index, success: false, error: 'Simulated failure' });
       } else {
         success++;
-        results.push({ index, success: true, data: item });
+        results.push({ index, success: true, data: _item });
       }
     });
 
