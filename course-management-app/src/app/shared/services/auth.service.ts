@@ -21,17 +21,32 @@ export class AuthService {
 
   // Authentication API
   login(username: string, password: string): boolean {
+    console.log('Login attempt for:', username);
+    
     // Admin hardcoded
     if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
+      console.log('Admin login successful');
       this.state.signInAs('admin', username);
       return true;
     }
 
     const user = this.findUser(username);
+    console.log('Found user:', user);
+    
     if (user && user.password === password) {
+      // Fix legacy role if necessary
+      if (user.role === 'user') {
+        console.log('Legacy role detected, fixing user role to student');
+        user.role = 'student';
+        this.updateUserRole(user.username, 'student');
+      }
+      
+      console.log('User login successful:', user.role, user.username);
       this.state.signInAs(user.role, user.username);
       return true;
     }
+    
+    console.log('Login failed');
     return false;
   }
 
@@ -45,11 +60,19 @@ export class AuthService {
       return { success: false, message: "Nom d'utilisateur réservé" };
 
     const users = this.getUsers();
+    console.log('Current users before registration:', users);
+    
     if (users.some((u) => u.username.toLowerCase() === username.toLowerCase())) {
       return { success: false, message: 'Utilisateur déjà existant' };
     }
-    users.push({ username, password, role });
+    
+    const newUser = { username, password, role };
+    users.push(newUser);
     this.setUsers(users);
+    
+    console.log('New user added:', newUser);
+    console.log('Users after registration:', this.getUsers());
+    
     return { success: true };
   }
 
@@ -82,5 +105,15 @@ export class AuthService {
 
   private findUser(username: string): StoredUser | undefined {
     return this.getUsers().find((u) => u.username.toLowerCase() === username.toLowerCase());
+  }
+
+  private updateUserRole(username: string, newRole: UserRole): void {
+    const users = this.getUsers();
+    const userIndex = users.findIndex((u) => u.username.toLowerCase() === username.toLowerCase());
+    if (userIndex !== -1) {
+      users[userIndex].role = newRole;
+      this.setUsers(users);
+      console.log(`Updated role for ${username} to ${newRole}`);
+    }
   }
 }

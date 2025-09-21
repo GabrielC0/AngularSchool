@@ -1,6 +1,6 @@
 import { Injectable, effect, signal, computed } from '@angular/core';
 
-export type UserRole = 'guest' | 'admin' | 'student';
+export type UserRole = 'guest' | 'admin' | 'student' | 'user';
 
 @Injectable({ providedIn: 'root' })
 export class AppStateService {

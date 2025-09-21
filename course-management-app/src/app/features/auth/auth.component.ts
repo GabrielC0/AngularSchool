@@ -10,6 +10,7 @@ import {
 import { Router } from '@angular/router';
 import { AuthService } from '../../shared/services/auth.service';
 import { ToastService } from '../../shared/services/toast.service';
+import { RedirectService } from '../../shared/services/redirect.service';
 
 @Component({
   selector: 'app-auth',
@@ -152,7 +153,8 @@ export class AuthComponent {
     private fb: FormBuilder,
     private auth: AuthService,
     private router: Router,
-    private toast: ToastService
+    private toast: ToastService,
+    private redirectService: RedirectService
   ) {
     this.form = this.fb.group({
       username: ['', [Validators.required, Validators.minLength(3)]],
@@ -167,12 +169,8 @@ export class AuthComponent {
     const ok = this.auth.login(username, password);
     if (ok) {
       this.toast.success('Connecté');
-      // Rediriger selon le rôle
-      if (this.auth.getCurrentRole() === 'student') {
-        this.router.navigate(['/student']);
-      } else {
-        this.router.navigate(['/']);
-      }
+      // Utiliser le service de redirection
+      this.redirectService.redirectBasedOnRole();
     } else {
       this.toast.error('Identifiants invalides');
     }
@@ -201,7 +199,7 @@ export class AuthComponent {
       const loginSuccess = this.auth.login(this.studentUsername, this.studentPassword);
       if (loginSuccess) {
         this.toast.success(`Compte élève créé et connecté ! Bienvenue ${this.studentUsername} !`);
-        this.router.navigate(['/student']);
+        this.redirectService.redirectBasedOnRole();
       } else {
         this.toast.error('Erreur lors de la connexion automatique');
       }

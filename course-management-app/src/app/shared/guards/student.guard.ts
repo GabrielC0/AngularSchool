@@ -20,8 +20,8 @@ export class StudentGuard implements CanActivate {
   canActivate(): boolean {
     const role = this.appState.role();
 
-    // Only students can access this route
-    if (role === 'student') {
+    // Students and legacy users can access this route
+    if (role === 'student' || role === 'user') {
       return true;
     }
 

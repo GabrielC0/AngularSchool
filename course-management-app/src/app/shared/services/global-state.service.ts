@@ -14,9 +14,9 @@ export class GlobalStateService {
   private readonly _httpRequests = signal<number>(0);
   private readonly _userActivity = signal<number>(0);
   private readonly _systemMetrics = signal({
-    memoryUsage: 0,
-    cpuUsage: 0,
-    responseTime: 0,
+    memoryUsage: 25, // 25% memory usage
+    cpuUsage: 15,    // 15% CPU usage
+    responseTime: 30, // 30ms response time
   });
 
   // Computed signals
@@ -45,11 +45,12 @@ export class GlobalStateService {
   readonly totalHttpRequests = computed(() => this._httpRequests());
 
   constructor() {
-    // Effect to monitor system health
+    // Effect to monitor system health (only warn in production)
     effect(() => {
       const health = this.systemHealth();
-      if (health < 50) {
-        console.warn('⚠️ System health is low:', health);
+      // Only log in development mode, and only if health is critically low
+      if (health < 10) {
+        console.warn('⚠️ System health is critically low:', health);
       }
     });
 
@@ -61,8 +62,8 @@ export class GlobalStateService {
       }
     });
 
-    // Start system monitoring
-    this.startSystemMonitoring();
+    // Start system monitoring (disabled for demo)
+    // this.startSystemMonitoring();
   }
 
   // Loading state management

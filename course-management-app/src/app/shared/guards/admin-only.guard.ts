@@ -26,8 +26,8 @@ export class AdminOnlyGuard implements CanActivate {
     }
 
     // Redirect non-admin users based on their role
-    if (role === 'student') {
-      // Redirect students to their dedicated page
+    if (role === 'student' || role === 'user') {
+      // Redirect students and legacy users to their dedicated page
       this.router.navigate(['/student']);
     } else {
       // Redirect unauthenticated users to authentication page

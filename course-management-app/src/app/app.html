@@ -3,7 +3,7 @@
 >
   <header
     class="border-b border-slate-200 bg-white/80 backdrop-blur-md shadow-sm"
-    *ngIf="isAuthenticated() && !isStudentRoute()"
+    *ngIf="isAuthenticated() && !isStudentRoute() && isAdmin()"
   >
     <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
       <div>
@@ -17,6 +17,7 @@
       </div>
       <nav class="flex items-center gap-3">
         <a
+          *ngIf="isAdmin()"
           routerLink="/"
           class="px-3 py-2 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-50 hover:border-slate-400 transition-all duration-300 hover:transform hover:-translate-y-0.5 hover:shadow-md"
           >Accueil</a
@@ -24,19 +25,19 @@
         <ng-container *ngIf="isNavigating(); else roleAware"></ng-container>
         <ng-template #roleAware>
           <a
-            *ngIf="true"
+            *ngIf="isAdmin()"
             routerLink="/courses"
             class="px-3 py-2 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-50 hover:border-slate-400 transition-all duration-300 hover:transform hover:-translate-y-0.5 hover:shadow-md"
             >Cours</a
           >
           <a
-            *ngIf="true"
+            *ngIf="isAdmin()"
             routerLink="/professors"
             class="px-3 py-2 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-50 hover:border-slate-400 transition-all duration-300 hover:transform hover:-translate-y-0.5 hover:shadow-md"
             >Profs</a
           >
           <a
-            *ngIf="true"
+            *ngIf="isAdmin()"
             routerLink="/reports"
             class="px-3 py-2 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-50 hover:border-slate-400 transition-all duration-300 hover:transform hover:-translate-y-0.5 hover:shadow-md"
             >Rapports</a

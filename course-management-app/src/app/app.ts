@@ -14,6 +14,7 @@ import { inject } from '@angular/core';
 import { ProfessorsService } from './features/courses/services/professors.service';
 import { CoursesService } from './features/courses/services/courses.service';
 import { AppStateService } from './shared/services/app-state.service';
+import { RedirectService } from './shared/services/redirect.service';
 
 @Component({
   selector: 'app-root',
@@ -26,6 +27,7 @@ export class App {
   protected readonly isNavigating = signal(false);
   protected readonly isStudentRoute = signal(false);
   protected readonly appState = inject(AppStateService);
+  private readonly redirectService = inject(RedirectService);
 
   constructor(router: Router) {
     // Prefetch datasets at app start
@@ -36,6 +38,11 @@ export class App {
 
     // Init current route state
     this.isStudentRoute.set(router.url?.startsWith('/student'));
+
+    // Check for automatic redirection on app startup
+    setTimeout(() => {
+      this.redirectService.checkAndRedirect();
+    }, 100);
 
     router.events.subscribe((ev) => {
       if (ev instanceof NavigationStart) {
@@ -59,6 +66,15 @@ export class App {
 
   protected isAuthenticated(): boolean {
     return this.appState.isAuthenticated();
+  }
+
+  protected isAdmin(): boolean {
+    return this.appState.isAdmin();
+  }
+
+  protected isStudent(): boolean {
+    const role = this.appState.role();
+    return role === 'student' || role === 'user';
   }
 
   protected logout(): void {
