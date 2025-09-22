@@ -2,10 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of, delay } from 'rxjs';
 import { GlobalStateService } from './global-state.service';
 
-/**
- * Mock API service for simulating real API calls with delays
- * Demonstrates loading states and error handling
- */
+
 @Injectable({
   providedIn: 'root',
 })
@@ -14,9 +11,7 @@ export class MockApiService {
 
   constructor(private globalState: GlobalStateService) {}
 
-  /**
-   * Simulate a successful API call with random delay
-   */
+  
   simulateApiCall<T>(data: T, minDelay: number = 1000, maxDelay: number = 3000): Observable<T> {
     this.requestCount++;
     const requestId = `api-${this.requestCount}`;
@@ -27,14 +22,12 @@ export class MockApiService {
 
     return of(data).pipe(
       delay(delayTime)
-      // Simulate finalize behavior
-      // Note: In real implementation, you'd use finalize operator
+
+
     ) as Observable<T>;
   }
 
-  /**
-   * Simulate an API call that might fail
-   */
+  
   simulateUnreliableApiCall<T>(data: T, failureRate: number = 0.3): Observable<T> {
     this.requestCount++;
     const requestId = `api-${this.requestCount}`;
@@ -57,9 +50,7 @@ export class MockApiService {
     });
   }
 
-  /**
-   * Simulate paginated data
-   */
+  
   simulatePaginatedData<T>(
     data: T[],
     page: number = 1,
@@ -77,9 +68,7 @@ export class MockApiService {
     });
   }
 
-  /**
-   * Simulate search functionality
-   */
+  
   simulateSearch<T>(data: T[], searchTerm: string, searchFields: Array<keyof T>): Observable<T[]> {
     const filteredData = data.filter((item) => {
       return searchFields.some((field) => {
@@ -91,9 +80,7 @@ export class MockApiService {
     return this.simulateApiCall(filteredData, 500, 1500);
   }
 
-  /**
-   * Simulate data creation
-   */
+  
   simulateCreate<T>(data: T): Observable<T> {
     const newData = {
       ...data,
@@ -105,9 +92,7 @@ export class MockApiService {
     return this.simulateApiCall(newData, 800, 2000);
   }
 
-  /**
-   * Simulate data update
-   */
+  
   simulateUpdate<T>(id: string, data: Partial<T>): Observable<T> {
     const updatedData = {
       ...data,
@@ -118,16 +103,12 @@ export class MockApiService {
     return this.simulateApiCall(updatedData, 600, 1800);
   }
 
-  /**
-   * Simulate data deletion
-   */
+  
   simulateDelete(id: string): Observable<{ success: boolean; id: string }> {
     return this.simulateApiCall({ success: true, id }, 400, 1200);
   }
 
-  /**
-   * Simulate batch operations
-   */
+  
   simulateBatchOperation<T>(
     items: T[],
     _operation: 'create' | 'update' | 'delete'
@@ -137,9 +118,9 @@ export class MockApiService {
     let failed = 0;
 
     items.forEach((_item, index) => {
-      // Simulate some failures
+
       if (Math.random() < 0.1) {
-        // 10% failure rate
+
         failed++;
         results.push({ index, success: false, error: 'Simulated failure' });
       } else {
@@ -151,9 +132,7 @@ export class MockApiService {
     return this.simulateApiCall({ success, failed, results }, 2000, 5000);
   }
 
-  /**
-   * Get mock data for testing
-   */
+  
   getMockData<T>(type: string): T[] {
     switch (type) {
       case 'users':

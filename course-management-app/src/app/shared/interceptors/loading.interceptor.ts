@@ -4,10 +4,7 @@ import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 import { GlobalStateService } from '../services/global-state.service';
 
-/**
- * HTTP interceptor for managing loading states
- * Automatically sets loading state for HTTP requests
- */
+
 @Injectable()
 export class LoadingInterceptor implements HttpInterceptor {
   private activeRequests = 0;
@@ -15,7 +12,7 @@ export class LoadingInterceptor implements HttpInterceptor {
   constructor(private globalState: GlobalStateService) {}
 
   intercept(req: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    // Skip loading state for certain requests
+
     if (this.shouldSkipLoading(req)) {
       return next.handle(req);
     }
@@ -36,7 +33,7 @@ export class LoadingInterceptor implements HttpInterceptor {
   }
 
   private shouldSkipLoading(req: HttpRequest<unknown>): boolean {
-    // Skip loading for health checks and small requests
+
     return req.url.includes('/health') || req.url.includes('/ping') || req.method === 'HEAD';
   }
 }

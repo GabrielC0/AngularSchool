@@ -25,7 +25,7 @@ export class ProfessorsService extends BaseApiService {
   create(name: string): Observable<Professor> {
     return this.post<Professor>('/professors', { name }).pipe(
       tap(() => {
-        // Invalidate cache after mutation
+
         this.listCache$ = undefined;
       })
     );

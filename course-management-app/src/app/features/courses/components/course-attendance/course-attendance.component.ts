@@ -239,7 +239,7 @@ import {
   ],
 })
 export class CourseAttendanceComponent implements OnInit, OnDestroy {
-  // Exposer l'enum pour le template
+
   readonly AttendanceStatus = AttendanceStatus;
 
   course: Course | null = null;
@@ -274,7 +274,7 @@ export class CourseAttendanceComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.errorMessage = null;
 
-    // Simulation du chargement d'un cours avec des données de présence
+
     setTimeout(() => {
       this.course = {
         id: id,

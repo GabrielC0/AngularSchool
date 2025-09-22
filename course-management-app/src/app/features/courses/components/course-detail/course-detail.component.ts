@@ -227,7 +227,7 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.errorMessage = null;
 
-    // Simulation du chargement d'un cours avec des données plus complètes
+
     setTimeout(() => {
       this.course = {
         id: id,
@@ -363,14 +363,14 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
     }
   }
 
-  // Méthode pour émettre l'événement d'inscription d'étudiant
+
   onStudentEnrolled(studentId: string): void {
     if (this.course) {
       this.studentEnrolled.emit({ courseId: this.course.id, studentId });
     }
   }
 
-  // Méthode pour émettre l'événement de suppression de cours
+
   onCourseDeleted(): void {
     if (this.course) {
       this.courseDeleted.emit(this.course.id);

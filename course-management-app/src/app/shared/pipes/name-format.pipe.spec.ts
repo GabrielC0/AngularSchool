@@ -61,7 +61,7 @@ describe('NameFormatPipe', () => {
   it('should abbreviate long names', () => {
     expect(pipe.transform('Christopher', 'abbreviate')).toBe('C.');
     expect(pipe.transform('Elizabeth', 'abbreviate')).toBe('E.');
-    expect(pipe.transform('John', 'abbreviate')).toBe('John'); // Short names unchanged
+    expect(pipe.transform('John', 'abbreviate')).toBe('John');
   });
 
   it('should handle single names', () => {

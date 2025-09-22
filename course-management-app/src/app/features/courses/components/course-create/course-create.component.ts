@@ -18,10 +18,7 @@ import { ToastService } from '../../../../shared/services/toast.service';
 import { DayOfWeek } from '../../../../shared/models/course.model';
 import { APP_CONSTANTS } from '../../../../shared/constants/app.constants';
 
-/**
- * Course Create Component - Handles course creation with reactive forms
- * Features: Form validation, custom validators, error handling
- */
+
 @Component({
   selector: 'app-course-create',
   standalone: true,
@@ -40,10 +37,10 @@ export class CourseCreateComponent implements OnInit, OnDestroy {
   isProfessorsLoading = false;
   private isProfessorsLoaded = false;
 
-  // Available days for course schedule
+
   readonly daysOfWeek = Object.values(DayOfWeek);
 
-  // Time slots for course schedule
+
   readonly timeSlots = [
     '08:00',
     '08:30',
@@ -82,9 +79,7 @@ export class CourseCreateComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  /**
-   * Initialize the reactive form with all necessary controls
-   */
+  
   private initializeForm(): void {
     this.courseForm = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
@@ -93,27 +88,25 @@ export class CourseCreateComponent implements OnInit, OnDestroy {
       schedule: this.fb.array([], [Validators.required, this.minScheduleValidator]),
     });
 
-    // Ensure at least one schedule entry exists by default for better UX
+
     if (this.scheduleFormArray.length === 0) {
       this.addSchedule();
-      // Recompute validity right away so the button state updates correctly
+
       this.scheduleFormArray.updateValueAndValidity({ onlySelf: true });
       this.courseForm.updateValueAndValidity({ onlySelf: false });
     }
   }
 
-  /**
-   * Setup form validation and error handling
-   */
+  
   private setupFormValidation(): void {
-    // Watch for form changes to clear error messages
+
     this.courseForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
       if (this.errorMessage) {
         this.errorMessage = null;
       }
     });
 
-    // Reset schedule validation state when any schedule control changes
+
     const scheduleGroup = this.scheduleFormArray;
     scheduleGroup.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.scheduleValidated = false;
@@ -144,16 +137,12 @@ export class CourseCreateComponent implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   * Get the schedule form array
-   */
+  
   get scheduleFormArray(): FormArray {
     return this.courseForm.get('schedule') as FormArray;
   }
 
-  /**
-   * Add a new schedule entry to the form
-   */
+  
   addSchedule(): void {
     const scheduleGroup = this.fb.group(
       {
@@ -166,21 +155,17 @@ export class CourseCreateComponent implements OnInit, OnDestroy {
     );
 
     this.scheduleFormArray.push(scheduleGroup);
-    // Make sure validators on the array and form are re-evaluated after push
+
     this.scheduleFormArray.updateValueAndValidity({ onlySelf: true });
     this.courseForm.updateValueAndValidity({ onlySelf: false });
   }
 
-  /**
-   * Remove a schedule entry from the form
-   */
+  
   removeSchedule(index: number): void {
     this.scheduleFormArray.removeAt(index);
   }
 
-  /**
-   * Validate a specific schedule group explicitly
-   */
+  
   validateSchedule(index: number): void {
     const group = this.scheduleFormArray.at(index) as FormGroup | undefined;
     if (!group) return;
@@ -235,18 +220,14 @@ export class CourseCreateComponent implements OnInit, OnDestroy {
       });
   }
 
-  /**
-   * Check group-level errors (e.g., timeRange) on a schedule FormGroup
-   */
+  
   hasScheduleGroupError(index: number, errorKey: string): boolean {
     const group = this.scheduleFormArray.at(index) as FormGroup | undefined;
     if (!group) return false;
     return !!group.errors?.[errorKey] && (group.touched || group.dirty);
   }
 
-  /**
-   * Get group-level error message for a schedule FormGroup
-   */
+  
   getScheduleGroupErrorMessage(index: number): string {
     const group = this.scheduleFormArray.at(index) as FormGroup | undefined;
     if (!group || !group.errors) return '';
@@ -256,9 +237,7 @@ export class CourseCreateComponent implements OnInit, OnDestroy {
     return 'Valeur invalide';
   }
 
-  /**
-   * Enable editing of a validated schedule (forces re-validation before submit)
-   */
+  
   editSchedule(index: number): void {
     const group = this.scheduleFormArray.at(index) as FormGroup | undefined;
     if (!group) return;
@@ -268,9 +247,7 @@ export class CourseCreateComponent implements OnInit, OnDestroy {
     this.toast.info('Créneau en édition - revalidez pour continuer');
   }
 
-  /**
-   * Handle form submission
-   */
+  
   onSubmit(): void {
     if (this.courseForm.valid) {
       this.isLoading = true;
@@ -292,16 +269,14 @@ export class CourseCreateComponent implements OnInit, OnDestroy {
         ),
       };
 
-      // Simulate API call
+
       this.createCourse(courseData);
     } else {
       this.markFormGroupTouched();
     }
   }
 
-  /**
-   * Simulate course creation API call
-   */
+  
   private createCourse(courseData: CourseCreateRequest): void {
     this.coursesService
       .createCourse(courseData)
@@ -326,11 +301,9 @@ export class CourseCreateComponent implements OnInit, OnDestroy {
       });
   }
 
-  // Local toast supprimé au profit du ToastService global
 
-  /**
-   * Mark all form controls as touched to show validation errors
-   */
+
+  
   private markFormGroupTouched(): void {
     Object.keys(this.courseForm.controls).forEach((key) => {
       const control = this.courseForm.get(key);
@@ -348,18 +321,14 @@ export class CourseCreateComponent implements OnInit, OnDestroy {
     });
   }
 
-  /**
-   * Navigate back to courses list
-   */
+  
   onCancel(): void {
     this.router.navigate([APP_CONSTANTS.ROUTES.COURSES]);
   }
 
-  // Custom Validators
 
-  /**
-   * Custom validator to ensure start date is in the future
-   */
+
+  
   private futureDateValidator(control: AbstractControl): ValidationErrors | null {
     if (!control.value) return null;
 
@@ -370,9 +339,7 @@ export class CourseCreateComponent implements OnInit, OnDestroy {
     return selectedDate >= today ? null : { futureDate: true };
   }
 
-  /**
-   * Custom validator to ensure end date is after start date
-   */
+  
   private dateRangeValidator(control: AbstractControl): ValidationErrors | null {
     const startDate = control.get('startDate')?.value;
     const endDate = control.get('endDate')?.value;
@@ -385,17 +352,13 @@ export class CourseCreateComponent implements OnInit, OnDestroy {
     return end > start ? null : { dateRange: true };
   }
 
-  /**
-   * Custom validator to ensure at least one schedule entry
-   */
+  
   private minScheduleValidator(control: AbstractControl): ValidationErrors | null {
     const scheduleArray = control as FormArray;
     return scheduleArray.length > 0 ? null : { minSchedule: true };
   }
 
-  /**
-   * Custom validator to ensure end time is after start time
-   */
+  
   private timeRangeValidator = (control: AbstractControl): ValidationErrors | null => {
     const startTime = control.get('startTime')?.value;
     const endTime = control.get('endTime')?.value;
@@ -408,36 +371,28 @@ export class CourseCreateComponent implements OnInit, OnDestroy {
     return end > start ? null : { timeRange: true };
   };
 
-  /**
-   * Convert time string to minutes for comparison
-   */
+  
   private timeToMinutes(time: string): number {
     const [hours, minutes] = time.split(':').map(Number);
     return hours * 60 + minutes;
   }
 
-  // Helper methods for template
 
-  /**
-   * Check if a form control has an error
-   */
+
+  
   hasError(controlName: string, errorType: string): boolean {
     const control = this.courseForm.get(controlName);
     return !!(control && control.hasError(errorType) && control.touched);
   }
 
-  /**
-   * Check if a schedule form group has an error
-   */
+  
   hasScheduleError(index: number, controlName: string, errorType: string): boolean {
     const scheduleGroup = this.scheduleFormArray.at(index) as FormGroup;
     const control = scheduleGroup.get(controlName);
     return !!(control && control.hasError(errorType) && control.touched);
   }
 
-  /**
-   * Get error message for a form control
-   */
+  
   getErrorMessage(controlName: string): string {
     const control = this.courseForm.get(controlName);
     if (!control || !control.errors || !control.touched) return '';
@@ -465,9 +420,7 @@ export class CourseCreateComponent implements OnInit, OnDestroy {
     return 'Valeur invalide';
   }
 
-  /**
-   * Get field label for error messages
-   */
+  
   private getFieldLabel(controlName: string): string {
     const labels: { [key: string]: string } = {
       title: 'Le titre',

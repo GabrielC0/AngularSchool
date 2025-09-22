@@ -6,7 +6,7 @@ import { Course, CourseSchedule } from '../../shared/models/course.model';
 
 interface CalendarEvent {
   title: string;
-  time: string; // HH:mm–HH:mm
+  time: string;
   teacher?: string;
   room?: string;
 }
@@ -90,16 +90,16 @@ export class ReportsComponent implements OnInit {
   isLoading = true;
   private allCourses: Course[] = [];
 
-  // Palette douce et lisible (fond/bordure/texte)
+
   private colorPalette = [
-    { bg: '#EEF2FF', border: '#C7D2FE', text: '#3730A3' }, // indigo
-    { bg: '#ECFEFF', border: '#A5F3FC', text: '#155E75' }, // cyan
-    { bg: '#F0FDF4', border: '#BBF7D0', text: '#166534' }, // green
-    { bg: '#FEF3C7', border: '#FCD34D', text: '#92400E' }, // amber
-    { bg: '#FFE4E6', border: '#FDA4AF', text: '#9F1239' }, // rose
-    { bg: '#FAE8FF', border: '#E9D5FF', text: '#6B21A8' }, // purple
-    { bg: '#F5F5F4', border: '#E7E5E4', text: '#44403C' }, // stone
-    { bg: '#ECFCCB', border: '#D9F99D', text: '#3F6212' }, // lime
+    { bg: '#EEF2FF', border: '#C7D2FE', text: '#3730A3' },
+    { bg: '#ECFEFF', border: '#A5F3FC', text: '#155E75' },
+    { bg: '#F0FDF4', border: '#BBF7D0', text: '#166534' },
+    { bg: '#FEF3C7', border: '#FCD34D', text: '#92400E' },
+    { bg: '#FFE4E6', border: '#FDA4AF', text: '#9F1239' },
+    { bg: '#FAE8FF', border: '#E9D5FF', text: '#6B21A8' },
+    { bg: '#F5F5F4', border: '#E7E5E4', text: '#44403C' },
+    { bg: '#ECFCCB', border: '#D9F99D', text: '#3F6212' },
   ];
   private teacherColorMap = new Map<string, number>();
 

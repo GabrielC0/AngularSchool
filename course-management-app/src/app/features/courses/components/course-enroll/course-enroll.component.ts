@@ -250,7 +250,7 @@ export class CourseEnrollComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.errorMessage = null;
 
-    // Simulation du chargement d'un cours
+
     setTimeout(() => {
       this.course = {
         id: id,
@@ -307,7 +307,7 @@ export class CourseEnrollComponent implements OnInit, OnDestroy {
         courseId: this.course.id,
       };
 
-      // Simulation de l'inscription
+
       setTimeout(() => {
         this.isSubmitting = false;
         this.toast.success(
@@ -315,7 +315,7 @@ export class CourseEnrollComponent implements OnInit, OnDestroy {
         );
         this.enrollmentForm.reset();
 
-        // Mettre à jour la liste des étudiants
+
         if (this.course) {
           this.course.students.push({
             id: Date.now().toString(),

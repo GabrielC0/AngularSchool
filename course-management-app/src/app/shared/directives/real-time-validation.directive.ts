@@ -2,10 +2,7 @@ import { Directive, ElementRef, Input, OnInit, OnDestroy, Renderer2 } from '@ang
 import { NgControl } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 
-/**
- * Custom directive for real-time form validation
- * Adds visual feedback and error messages to form controls
- */
+
 @Directive({
   selector: '[appRealTimeValidation]',
   standalone: true,
@@ -36,16 +33,14 @@ export class RealTimeValidationDirective implements OnInit, OnDestroy {
     this.cleanupErrorElement();
   }
 
-  /**
-   * Setup initial validation styling and event listeners
-   */
+  
   private setupValidation(): void {
     const element = this.elementRef.nativeElement;
 
-    // Add base validation classes
+
     this.renderer.addClass(element, 'validation-control');
 
-    // Add focus/blur event listeners
+
     this.renderer.listen(element, 'focus', () => {
       this.isFocused = true;
       this.updateValidationState();
@@ -56,7 +51,7 @@ export class RealTimeValidationDirective implements OnInit, OnDestroy {
       this.updateValidationState();
     });
 
-    // Add input event listener for real-time validation
+
     if (this.showErrorOnType) {
       this.renderer.listen(element, 'input', () => {
         this.updateValidationState();
@@ -64,9 +59,7 @@ export class RealTimeValidationDirective implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   * Subscribe to form control value changes and status changes
-   */
+  
   private subscribeToControlChanges(): void {
     if (!this.ngControl.control) {
       return;
@@ -74,22 +67,20 @@ export class RealTimeValidationDirective implements OnInit, OnDestroy {
 
     const control = this.ngControl.control;
 
-    // Subscribe to value changes for real-time validation
+
     control.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
       if (this.showErrorOnType) {
         this.updateValidationState();
       }
     });
 
-    // Subscribe to status changes
+
     control.statusChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.updateValidationState();
     });
   }
 
-  /**
-   * Update the validation state and visual feedback
-   */
+  
   private updateValidationState(): void {
     const control = this.ngControl.control;
     if (!control) return;
@@ -100,16 +91,16 @@ export class RealTimeValidationDirective implements OnInit, OnDestroy {
     const isDirty = control.dirty;
     const hasErrors = control.errors && Object.keys(control.errors).length > 0;
 
-    // Determine if we should show errors
+
     const shouldShowError =
       hasErrors &&
       ((this.showErrorOnBlur && !this.isFocused && (isTouched || isDirty)) ||
         (this.showErrorOnType && (isTouched || isDirty)));
 
-    // Update visual state
+
     this.updateVisualState(element, isValid, shouldShowError || false);
 
-    // Update error message
+
     if (shouldShowError) {
       this.showErrorMessage(control.errors);
     } else {
@@ -117,16 +108,14 @@ export class RealTimeValidationDirective implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   * Update the visual state of the form control
-   */
+  
   private updateVisualState(element: HTMLElement, isValid: boolean, hasError: boolean): void {
-    // Remove existing validation classes
+
     this.renderer.removeClass(element, 'is-valid');
     this.renderer.removeClass(element, 'is-invalid');
     this.renderer.removeClass(element, 'is-warning');
 
-    // Add appropriate validation class
+
     if (hasError) {
       this.renderer.addClass(element, 'is-invalid');
     } else if (isValid && (this.ngControl.control?.touched || this.ngControl.control?.dirty)) {
@@ -134,9 +123,7 @@ export class RealTimeValidationDirective implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   * Show error message below the form control
-   */
+  
   private showErrorMessage(errors: Record<string, unknown>): void {
     if (!errors || this.errorElement) return;
 
@@ -145,12 +132,12 @@ export class RealTimeValidationDirective implements OnInit, OnDestroy {
 
     if (!errorMessage) return;
 
-    // Create error element
+
     this.errorElement = this.renderer.createElement('div');
     this.renderer.addClass(this.errorElement, 'validation-error');
     this.renderer.setProperty(this.errorElement, 'textContent', errorMessage);
 
-    // Insert error element after the form control
+
     const parent = this.renderer.parentNode(element);
     const nextSibling = this.renderer.nextSibling(element);
 
@@ -161,16 +148,12 @@ export class RealTimeValidationDirective implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   * Hide error message
-   */
+  
   private hideErrorMessage(): void {
     this.cleanupErrorElement();
   }
 
-  /**
-   * Clean up error element
-   */
+  
   private cleanupErrorElement(): void {
     if (this.errorElement) {
       this.renderer.removeChild(this.renderer.parentNode(this.errorElement), this.errorElement);
@@ -178,18 +161,16 @@ export class RealTimeValidationDirective implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   * Get error message based on validation errors
-   */
+  
   private getErrorMessage(errors: Record<string, unknown>): string {
     if (!errors) return '';
 
-    // Message personnalisé prioritaire
+
     if (this.errorMessage) {
       return this.errorMessage;
     }
 
-    // Accès sécurisé par clé (index signature)
+
     if (errors['required']) return 'Ce champ est requis';
     if (errors['email']) return 'Veuillez entrer une adresse email valide';
 

@@ -18,7 +18,7 @@ export class ToastService {
   private activeTimers = new Map<number, ReturnType<typeof setTimeout>>();
 
   show(text: string, type: ToastType = 'info', timeoutMs: number = 3000): void {
-    // Durée max 3s et un seul toast visible à la fois
+
     const duration = Math.min(timeoutMs ?? 3000, 3000);
     this.clearAll();
     const toast: ToastMessage = { id: this.nextId++, text, type, timeoutMs: duration };

@@ -82,7 +82,7 @@ export class ToastContainerComponent {
   }
 
   clearAll(): void {
-    // Méthode pour vider tous les toasts (si nécessaire)
+
     this.allToastsCleared.emit();
   }
 }

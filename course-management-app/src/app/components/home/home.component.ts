@@ -3,9 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { AdminMenuComponent } from '../../features/admin/admin-menu.component';
 
-/**
- * Home Component - Landing page for the course management system
- */
+
 @Component({
   selector: 'app-home',
   standalone: true,

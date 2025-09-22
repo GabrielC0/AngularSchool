@@ -8,7 +8,7 @@ import { ToastService } from '../../shared/services/toast.service';
 
 interface StudentEvent {
   title: string;
-  time: string; // HH:mm–HH:mm
+  time: string;
   teacher?: string;
   room?: string;
 }
@@ -117,7 +117,7 @@ export class StudentPlanningComponent implements OnInit {
   isLoading = true;
   private allCourses: Course[] = [];
 
-  // Services injectés
+
   protected readonly appState = inject(AppStateService);
   private readonly router = inject(Router);
   private readonly toast = inject(ToastService);

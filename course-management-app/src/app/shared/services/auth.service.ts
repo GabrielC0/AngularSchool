@@ -5,7 +5,7 @@ import { AppStateService, UserRole } from './app-state.service';
 interface StoredUser {
   username: string;
   password: string;
-  role: UserRole; // 'student' only for registered users (admin is hardcoded)
+  role: UserRole;
 }
 
 const ADMIN_CREDENTIALS = {
@@ -19,11 +19,11 @@ export class AuthService {
 
   constructor(private state: AppStateService, private router: Router) {}
 
-  // Authentication API
+
   login(username: string, password: string): boolean {
     console.log('Login attempt for:', username);
     
-    // Admin hardcoded
+
     if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
       console.log('Admin login successful');
       this.state.signInAs('admin', username);
@@ -34,7 +34,7 @@ export class AuthService {
     console.log('Found user:', user);
     
     if (user && user.password === password) {
-      // Fix legacy role if necessary
+
       if (user.role === 'user') {
         console.log('Legacy role detected, fixing user role to student');
         user.role = 'student';
@@ -85,7 +85,7 @@ export class AuthService {
     return this.state.role();
   }
 
-  // Storage helpers
+
   private getUsers(): StoredUser[] {
     try {
       const raw = localStorage.getItem(this.storageKey);
@@ -99,7 +99,7 @@ export class AuthService {
     try {
       localStorage.setItem(this.storageKey, JSON.stringify(users));
     } catch {
-      // ignore
+
     }
   }
 

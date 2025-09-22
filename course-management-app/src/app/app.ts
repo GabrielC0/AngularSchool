@@ -30,16 +30,16 @@ export class App {
   private readonly redirectService = inject(RedirectService);
 
   constructor(router: Router) {
-    // Prefetch datasets at app start
+
     const profs = inject(ProfessorsService);
     const courses = inject(CoursesService);
     profs.list().subscribe();
     courses.listCourses({ page: 1, limit: 20 }).subscribe();
 
-    // Init current route state
+
     this.isStudentRoute.set(router.url?.startsWith('/student'));
 
-    // Check for automatic redirection on app startup
+
     setTimeout(() => {
       this.redirectService.checkAndRedirect();
     }, 100);
@@ -80,7 +80,7 @@ export class App {
   protected logout(): void {
     if (confirm('Êtes-vous sûr de vouloir vous déconnecter ?')) {
       this.appState.signOut();
-      // Redirection vers la page d'authentification
+
       window.location.href = '/auth';
     }
   }

@@ -11,10 +11,7 @@ import { catchError } from 'rxjs/operators';
 import { GlobalStateService } from '../services/global-state.service';
 import { ToastService } from '../services/toast.service';
 
-/**
- * HTTP interceptor for centralized error handling
- * Catches HTTP errors and provides user-friendly messages
- */
+
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
   constructor(private globalState: GlobalStateService, private toast: ToastService) {}
@@ -83,13 +80,13 @@ export class ErrorInterceptor implements HttpInterceptor {
         }
     }
 
-    // Add error to global state
+
     this.globalState.addError(`${errorType}: ${errorMessage} (${req.url})`);
 
-    // Show toast notification
+
     this.toast.error(errorMessage);
 
-    // Log error for debugging
+
     console.error('HTTP Error:', {
       status: error.status,
       message: error.message,

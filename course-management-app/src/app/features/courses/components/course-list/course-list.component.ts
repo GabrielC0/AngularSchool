@@ -5,9 +5,7 @@ import { CoursesService } from '../../services/courses.service';
 import { ToastService } from '../../../../shared/services/toast.service';
 import { Course } from '../../../../shared/models/course.model';
 
-/**
- * Course List Component - Displays list of courses
- */
+
 @Component({
   selector: 'app-course-list',
   standalone: true,
@@ -260,7 +258,7 @@ export class CourseListComponent implements OnInit {
         this.courses = res.courses || [];
         this.isLoading = false;
         this.cdr.detectChanges();
-        // Émettre l'événement de rafraîchissement
+
         this.refreshRequested.emit();
       },
       error: (err) => {
@@ -272,12 +270,12 @@ export class CourseListComponent implements OnInit {
     });
   }
 
-  // Méthode publique pour sélectionner un cours
+
   selectCourse(course: Course): void {
     this.courseSelected.emit(course);
   }
 
-  // Méthode publique pour rafraîchir la liste
+
   refresh(): void {
     this.fetchCourses();
   }
@@ -305,7 +303,7 @@ export class CourseListComponent implements OnInit {
         this.cancelDelete();
         this.cdr.detectChanges();
         this.toast.success('Cours supprimé');
-        // Émettre l'événement de suppression
+
         this.courseDeleted.emit(id);
       },
       error: (err) => {
@@ -319,12 +317,12 @@ export class CourseListComponent implements OnInit {
     });
   }
 
-  // Back-compat: plus utilisé (remplacé par modal), gardé si besoin d'appel direct
+
   onDelete(id: string): void {
     this.openDelete(id);
   }
 
-  // Nettoie l'affichage des textes: masque les valeurs qui seraient l'URL locale (http://localhost:4200/)
+
   formatDisplay(text?: string): string {
     if (!text) return '';
     const trimmed = text.trim();

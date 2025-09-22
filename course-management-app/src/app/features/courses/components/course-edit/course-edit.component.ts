@@ -180,8 +180,8 @@ export class CourseEditComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.errorMessage = null;
 
-    // Pour l'instant, on simule le chargement d'un cours
-    // Dans une vraie app, on utiliserait: this.coursesService.getCourse(id)
+
+
     setTimeout(() => {
       this.course = {
         id: id,

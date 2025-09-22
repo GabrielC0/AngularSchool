@@ -1,14 +1,14 @@
 export const APP_CONSTANTS = {
-  // API Configuration
+
   API_BASE_URL: '/api',
 
-  // Pagination
+
   PAGINATION: {
     DEFAULT_PAGE_SIZE: 10,
     MAX_PAGE_SIZE: 100,
   },
 
-  // Course Status
+
   COURSE_STATUS: {
     DRAFT: 'draft',
     ACTIVE: 'active',
@@ -16,7 +16,7 @@ export const APP_CONSTANTS = {
     CANCELLED: 'cancelled',
   },
 
-  // Routes
+
   ROUTES: {
     HOME: '/',
     COURSES: '/courses',

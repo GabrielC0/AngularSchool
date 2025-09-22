@@ -2,10 +2,7 @@ import { Component, signal, computed, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 
-/**
- * Admin menu component with access to advanced features
- * Demonstrates Angular 20+ Signals implementation
- */
+
 @Component({
   selector: 'app-admin-menu',
   standalone: true,
@@ -165,7 +162,7 @@ import { Router } from '@angular/router';
   `,
 })
 export class AdminMenuComponent {
-  // Writable signals
+
   readonly counter = signal(0);
   readonly signalDemoOpen = signal(false);
   readonly isHttpLoading = signal(false);
@@ -177,7 +174,7 @@ export class AdminMenuComponent {
   readonly apiResponse = signal<string | null>(null);
   readonly consoleOutput = signal<string[]>([]);
 
-  // Computed signals
+
   readonly doubleCounter = computed(() => this.counter() * 2);
   readonly status = computed(() =>
     this.counter() > 10 ? 'High' : this.counter() > 5 ? 'Medium' : 'Low'
@@ -198,7 +195,7 @@ export class AdminMenuComponent {
   });
 
   constructor(private router: Router) {
-    // Effect to log counter changes
+
     effect(() => {
       const count = this.counter();
       if (count > 0) {
@@ -206,7 +203,7 @@ export class AdminMenuComponent {
       }
     });
 
-    // Effect to monitor performance
+
     effect(() => {
       const score = this.performanceScore();
       if (score > 100) {
@@ -215,7 +212,7 @@ export class AdminMenuComponent {
     });
   }
 
-  // Signal management methods
+
   incrementCounter(): void {
     this.counter.update((value) => value + 1);
   }
@@ -232,13 +229,13 @@ export class AdminMenuComponent {
     this.signalDemoOpen.update((value) => !value);
   }
 
-  // HTTP testing methods
+
   async testHttpInterceptor(): Promise<void> {
     this.isHttpLoading.set(true);
     this.httpRequests.update((value) => value + 1);
 
     try {
-      // Simulate HTTP request with delay
+
       await new Promise((resolve) => setTimeout(resolve, 2000));
       this.addConsoleOutput('✅ HTTP Interceptor test completed');
     } catch {
@@ -252,19 +249,19 @@ export class AdminMenuComponent {
   testErrorHandling(): void {
     this.errorCount.update((value) => value + 1);
     this.addConsoleOutput('🧪 Testing error handling...');
-    // Simulate error
+
     setTimeout(() => {
       this.addConsoleOutput('❌ Simulated error handled correctly');
     }, 1000);
   }
 
-  // API simulation
+
   async simulateApiCall(): Promise<void> {
     this.isApiLoading.set(true);
 
     try {
-      // Simulate API call with random delay
-      const delay = Math.random() * 2000 + 1000; // 1-3 seconds
+
+      const delay = Math.random() * 2000 + 1000;
       await new Promise((resolve) => setTimeout(resolve, delay));
 
       const responses = ['Success', 'Data loaded', 'Operation completed'];
@@ -276,12 +273,12 @@ export class AdminMenuComponent {
     }
   }
 
-  // Loading states
+
   toggleLoadingState(): void {
     this.isLoadingDemo.update((value) => !value);
     if (this.isLoadingDemo()) {
       this.addConsoleOutput('⏳ Loading state started');
-      // Auto-stop after 3 seconds
+
       setTimeout(() => {
         this.isLoadingDemo.set(false);
         this.addConsoleOutput('✅ Loading state completed');
@@ -289,12 +286,12 @@ export class AdminMenuComponent {
     }
   }
 
-  // Performance testing
+
   runPerformanceTest(): void {
     this.addConsoleOutput('🚀 Running performance test...');
     const startTime = performance.now();
 
-    // Simulate heavy computation
+
     let _result = 0;
     for (let i = 0; i < 1000000; i++) {
       _result += Math.random();
@@ -306,7 +303,7 @@ export class AdminMenuComponent {
     this.addConsoleOutput(`⚡ Performance test completed in ${duration}ms`);
   }
 
-  // Console management
+
   clearConsole(): void {
     this.consoleOutput.set([]);
     console.clear();

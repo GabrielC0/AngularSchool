@@ -14,17 +14,17 @@ export class AppStateService {
 
   constructor() {
     effect(() => {
-      // Persist in localStorage for demo
+
       const snapshot = { userName: this.userName(), role: this.role() };
       try {
         localStorage.setItem('app_state', JSON.stringify(snapshot));
       } catch (err) {
-        // Fallback if storage is unavailable
+
         console.warn('Persist state failed', err);
       }
     });
 
-    // Hydrate
+
     try {
       const raw = localStorage.getItem('app_state');
       if (raw) {

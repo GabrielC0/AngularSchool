@@ -1,45 +1,45 @@
-// Simple Express backend for Course Management App
-// In-memory storage, CORS enabled
+
+
 const express = require('express');
 const cors = require('cors');
 
 const app = express();
 const PORT = process.env.PORT || 5050;
 
-// Middleware
+
 app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
 
-// Request logger
+
 app.use((req, _res, next) => {
     console.log(`[api] ${req.method} ${req.originalUrl}`);
     next();
 });
 
-// Request logger
+
 app.use((req, _res, next) => {
     console.log(`[api] ${req.method} ${req.originalUrl}`);
     next();
 });
 
-// Note: cors() middleware gère déjà les préflight OPTIONS
 
-// In-memory DB
+
+
 const db = {
     courses: [],
     professors: [],
 };
 
-// Helpers
+
 function generateId() {
     return Math.random().toString(36).slice(2, 10);
 }
 
-// Routes
+
 app.get('/api/health', (_req, res) => {
     res.json({ status: 'ok' });
 });
-// Professors API
+
 app.get('/api/professors', (_req, res) => {
     res.json({ professors: db.professors });
 });
@@ -64,7 +64,7 @@ app.delete('/api/professors/:id', (req, res) => {
 });
 
 
-// Root for quick sanity check
+
 app.get('/', (_req, res) => {
     res.send('Course API running');
 });
@@ -84,7 +84,7 @@ app.post('/api/courses', (req, res) => {
         console.warn('[api] invalid payload for POST /api/courses', req.body);
         return res.status(400).json({ message: 'Invalid payload' });
     }
-    // Prevent overlapping schedules (simple check per (dayOfWeek, time range, room))
+
     for (const s of schedule) {
         const roomConflict = db.courses.some(c => c.schedule?.some(cs =>
             cs.dayOfWeek === s.dayOfWeek && cs.room === s.room && !(s.endTime <= cs.startTime || s.startTime >= cs.endTime)
@@ -126,7 +126,7 @@ app.get('/api/courses/:id', (req, res) => {
     if (!course) return res.status(404).json({ message: 'Not found' });
     res.json(course);
 });
-// Check conflict endpoint
+
 app.post('/api/courses/check-conflict', (req, res) => {
     const { dayOfWeek, startTime, endTime, room, teacherId } = req.body || {};
     if (!dayOfWeek || !startTime || !endTime || !room || !teacherId) {

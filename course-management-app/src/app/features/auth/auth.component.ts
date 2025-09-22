@@ -169,18 +169,14 @@ export class AuthComponent {
     const ok = this.auth.login(username, password);
     if (ok) {
       this.toast.success('Connecté');
-      // Utiliser le service de redirection
+
       this.redirectService.redirectBasedOnRole();
     } else {
       this.toast.error('Identifiants invalides');
     }
   }
 
-  /**
-   * Creates a new student account with custom username and password
-   * Validates input fields and automatically logs in the student after successful registration
-   * Redirects to student dashboard upon successful account creation
-   */
+  
   createStudentAccount(): void {
     if (!this.studentUsername || this.studentUsername.length < 3) {
       this.toast.error("Le nom d'utilisateur doit contenir au moins 3 caractères");
@@ -192,10 +188,10 @@ export class AuthComponent {
       return;
     }
 
-    // Create student account with 'student' role
+
     const res = this.auth.register(this.studentUsername, this.studentPassword, 'student');
     if (res.success) {
-      // Automatically log in the student
+
       const loginSuccess = this.auth.login(this.studentUsername, this.studentPassword);
       if (loginSuccess) {
         this.toast.success(`Compte élève créé et connecté ! Bienvenue ${this.studentUsername} !`);

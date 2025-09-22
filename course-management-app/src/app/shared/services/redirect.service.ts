@@ -9,10 +9,7 @@ export class RedirectService {
   private router = inject(Router);
   private appState = inject(AppStateService);
 
-  /**
-   * Redirect user to appropriate page based on their role
-   * Called after authentication or when app loads
-   */
+  
   redirectBasedOnRole(): void {
     if (!this.appState.isAuthenticated()) {
       this.router.navigate(['/auth']);
@@ -30,7 +27,7 @@ export class RedirectService {
         this.router.navigate(['/student']);
         break;
       case 'user':
-        // Legacy role - treat as student
+
         console.log('Legacy user role detected, redirecting to student page');
         this.router.navigate(['/student']);
         break;
@@ -41,10 +38,7 @@ export class RedirectService {
     }
   }
 
-  /**
-   * Check if user should be redirected and redirect if necessary
-   * Useful for checking on app startup or route changes
-   */
+  
   checkAndRedirect(): void {
     if (this.appState.isAuthenticated()) {
       this.redirectBasedOnRole();

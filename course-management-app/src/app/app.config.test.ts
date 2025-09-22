@@ -13,7 +13,7 @@ import { ErrorInterceptor } from './shared/interceptors/error.interceptor';
 export const appConfigTest: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
-    // Note: No provideZonelessChangeDetection() for tests - use Zone.js instead
+
     provideRouter(routes),
     provideClientHydration(withEventReplay()),
     provideHttpClient(withInterceptorsFromDi()),
