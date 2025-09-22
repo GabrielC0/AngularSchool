@@ -48,7 +48,8 @@ export class NameFormatPipe implements PipeTransform {
    * Format name to initials (John Doe -> J.D.)
    */
   private formatInitials(name: string): string {
-    const words = name.split(' ').filter(word => word.length > 0);
+    // Split by spaces and hyphens, then filter empty strings
+    const words = name.split(/[\s-]+/).filter(word => word.length > 0);
     
     if (words.length === 0) {
       return '';
@@ -68,9 +69,9 @@ export class NameFormatPipe implements PipeTransform {
    */
   private formatTitle(name: string): string {
     return name
-      .split(' ')
+      .split(/\s+/)
+      .filter(word => word.length > 0)
       .map(word => {
-        if (word.length === 0) return word;
         return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
       })
       .join(' ');
@@ -85,20 +86,28 @@ export class NameFormatPipe implements PipeTransform {
   }
 
   /**
-   * Abbreviate long text (This is a very long text -> This is a very...)
+   * Abbreviate long names (Christopher -> C.)
    */
-  private formatAbbreviate(text: string, maxLength: number = 30): string {
-    if (text.length <= maxLength) {
-      return text;
+  private formatAbbreviate(name: string): string {
+    const words = name.split(' ').filter(word => word.length > 0);
+    
+    if (words.length === 0) {
+      return '';
     }
     
-    const truncated = text.substring(0, maxLength - 3);
-    const lastSpaceIndex = truncated.lastIndexOf(' ');
-    
-    if (lastSpaceIndex > 0) {
-      return truncated.substring(0, lastSpaceIndex) + '...';
+    // For single words longer than 4 characters, return first letter + dot
+    if (words.length === 1 && words[0].length > 4) {
+      return words[0].charAt(0).toUpperCase() + '.';
     }
     
-    return truncated + '...';
+    // For multiple words, return first letter of each word + dots
+    if (words.length > 1) {
+      return words
+        .map(word => word.charAt(0).toUpperCase())
+        .join('.') + '.';
+    }
+    
+    // For short single words, return as is
+    return words[0];
   }
 }

@@ -1,9 +1,14 @@
 import { NameFormatPipe } from './name-format.pipe';
+import { TestBed } from '@angular/core/testing';
+import { appConfigTest } from '../../app.config.test';
 
 describe('NameFormatPipe', () => {
   let pipe: NameFormatPipe;
 
   beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: appConfigTest.providers
+    });
     pipe = new NameFormatPipe();
   });
 
